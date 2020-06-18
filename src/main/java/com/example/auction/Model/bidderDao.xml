@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.auction.Dao.bidderDao">
+  <resultMap id="BaseResultMap" type="com.example.auction.Model.bidder">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="userid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="carid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="paymentvoucher" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="paymentstate" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="applicationtime" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="auctionnumber" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="other" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="Auctionstate" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="offerid" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="auctioninfoid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="ispaybond" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="appointmentseecarname" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="appointmentseecartel" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="seecartime" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="seecarmancertificates" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, userid, carid, paymentvoucher, paymentstate, applicationtime, auctionnumber, 
+    other, Auctionstate, offerid, auctioninfoid, ispaybond, appointmentseecarname, appointmentseecartel, 
+    seecartime, seecarmancertificates
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from bidder
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from bidder
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.auction.Model.bidder">
+    insert into bidder (id, userid, carid, 
+      paymentvoucher, paymentstate, applicationtime, 
+      auctionnumber, other, Auctionstate, 
+      offerid, auctioninfoid, ispaybond, 
+      appointmentseecarname, appointmentseecartel, 
+      seecartime, seecarmancertificates)
+    values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{carid,jdbcType=INTEGER}, 
+      #{paymentvoucher,jdbcType=VARCHAR}, #{paymentstate,jdbcType=VARCHAR}, #{applicationtime,jdbcType=VARCHAR}, 
+      #{auctionnumber,jdbcType=VARCHAR}, #{other,jdbcType=VARCHAR}, #{auctionstate,jdbcType=VARCHAR}, 
+      #{offerid,jdbcType=VARCHAR}, #{auctioninfoid,jdbcType=INTEGER}, #{ispaybond,jdbcType=VARCHAR}, 
+      #{appointmentseecarname,jdbcType=VARCHAR}, #{appointmentseecartel,jdbcType=VARCHAR}, 
+      #{seecartime,jdbcType=VARCHAR}, #{seecarmancertificates,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.auction.Model.bidder">
+    insert into bidder
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="carid != null">
+        carid,
+      </if>
+      <if test="paymentvoucher != null">
+        paymentvoucher,
+      </if>
+      <if test="paymentstate != null">
+        paymentstate,
+      </if>
+      <if test="applicationtime != null">
+        applicationtime,
+      </if>
+      <if test="auctionnumber != null">
+        auctionnumber,
+      </if>
+      <if test="other != null">
+        other,
+      </if>
+      <if test="auctionstate != null">
+        Auctionstate,
+      </if>
+      <if test="offerid != null">
+        offerid,
+      </if>
+      <if test="auctioninfoid != null">
+        auctioninfoid,
+      </if>
+      <if test="ispaybond != null">
+        ispaybond,
+      </if>
+      <if test="appointmentseecarname != null">
+        appointmentseecarname,
+      </if>
+      <if test="appointmentseecartel != null">
+        appointmentseecartel,
+      </if>
+      <if test="seecartime != null">
+        seecartime,
+      </if>
+      <if test="seecarmancertificates != null">
+        seecarmancertificates,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="carid != null">
+        #{carid,jdbcType=INTEGER},
+      </if>
+      <if test="paymentvoucher != null">
+        #{paymentvoucher,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentstate != null">
+        #{paymentstate,jdbcType=VARCHAR},
+      </if>
+      <if test="applicationtime != null">
+        #{applicationtime,jdbcType=VARCHAR},
+      </if>
+      <if test="auctionnumber != null">
+        #{auctionnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null">
+        #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="auctionstate != null">
+        #{auctionstate,jdbcType=VARCHAR},
+      </if>
+      <if test="offerid != null">
+        #{offerid,jdbcType=VARCHAR},
+      </if>
+      <if test="auctioninfoid != null">
+        #{auctioninfoid,jdbcType=INTEGER},
+      </if>
+      <if test="ispaybond != null">
+        #{ispaybond,jdbcType=VARCHAR},
+      </if>
+      <if test="appointmentseecarname != null">
+        #{appointmentseecarname,jdbcType=VARCHAR},
+      </if>
+      <if test="appointmentseecartel != null">
+        #{appointmentseecartel,jdbcType=VARCHAR},
+      </if>
+      <if test="seecartime != null">
+        #{seecartime,jdbcType=VARCHAR},
+      </if>
+      <if test="seecarmancertificates != null">
+        #{seecarmancertificates,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.auction.Model.bidder">
+    update bidder
+    <set>
+      <if test="userid != null">
+        userid = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="carid != null">
+        carid = #{carid,jdbcType=INTEGER},
+      </if>
+      <if test="paymentvoucher != null">
+        paymentvoucher = #{paymentvoucher,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentstate != null">
+        paymentstate = #{paymentstate,jdbcType=VARCHAR},
+      </if>
+      <if test="applicationtime != null">
+        applicationtime = #{applicationtime,jdbcType=VARCHAR},
+      </if>
+      <if test="auctionnumber != null">
+        auctionnumber = #{auctionnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null">
+        other = #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="auctionstate != null">
+        Auctionstate = #{auctionstate,jdbcType=VARCHAR},
+      </if>
+      <if test="offerid != null">
+        offerid = #{offerid,jdbcType=VARCHAR},
+      </if>
+      <if test="auctioninfoid != null">
+        auctioninfoid = #{auctioninfoid,jdbcType=INTEGER},
+      </if>
+      <if test="ispaybond != null">
+        ispaybond = #{ispaybond,jdbcType=VARCHAR},
+      </if>
+      <if test="appointmentseecarname != null">
+        appointmentseecarname = #{appointmentseecarname,jdbcType=VARCHAR},
+      </if>
+      <if test="appointmentseecartel != null">
+        appointmentseecartel = #{appointmentseecartel,jdbcType=VARCHAR},
+      </if>
+      <if test="seecartime != null">
+        seecartime = #{seecartime,jdbcType=VARCHAR},
+      </if>
+      <if test="seecarmancertificates != null">
+        seecarmancertificates = #{seecarmancertificates,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.auction.Model.bidder">
+    update bidder
+    set userid = #{userid,jdbcType=INTEGER},
+      carid = #{carid,jdbcType=INTEGER},
+      paymentvoucher = #{paymentvoucher,jdbcType=VARCHAR},
+      paymentstate = #{paymentstate,jdbcType=VARCHAR},
+      applicationtime = #{applicationtime,jdbcType=VARCHAR},
+      auctionnumber = #{auctionnumber,jdbcType=VARCHAR},
+      other = #{other,jdbcType=VARCHAR},
+      Auctionstate = #{auctionstate,jdbcType=VARCHAR},
+      offerid = #{offerid,jdbcType=VARCHAR},
+      auctioninfoid = #{auctioninfoid,jdbcType=INTEGER},
+      ispaybond = #{ispaybond,jdbcType=VARCHAR},
+      appointmentseecarname = #{appointmentseecarname,jdbcType=VARCHAR},
+      appointmentseecartel = #{appointmentseecartel,jdbcType=VARCHAR},
+      seecartime = #{seecartime,jdbcType=VARCHAR},
+      seecarmancertificates = #{seecarmancertificates,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

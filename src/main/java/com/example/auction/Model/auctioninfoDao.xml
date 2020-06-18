@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.auction.Dao.auctioninfoDao">
+  <resultMap id="BaseResultMap" type="com.example.auction.Model.auctioninfo">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="auctiontime" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="cycle" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="carid" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="floor" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="assessmentprice" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="other" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="auctionnumber" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="state" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, auctiontime, cycle, carid, floor, assessmentprice, other, auctionnumber,state
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from auctioninfo
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from auctioninfo
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.auction.Model.auctioninfo">
+    insert into auctioninfo (id, auctiontime, cycle, 
+      carid, floor, assessmentprice, 
+      other, auctionnumber,state)
+    values (#{id,jdbcType=INTEGER}, #{auctiontime,jdbcType=VARCHAR}, #{cycle,jdbcType=VARCHAR}, 
+      #{carid,jdbcType=VARCHAR}, #{floor,jdbcType=VARCHAR}, #{assessmentprice,jdbcType=VARCHAR}, 
+      #{other,jdbcType=VARCHAR}, #{auctionnumber,jdbcType=VARCHAR},#{state,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.auction.Model.auctioninfo">
+    insert into auctioninfo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="auctiontime != null">
+        auctiontime,
+      </if>
+      <if test="cycle != null">
+        cycle,
+      </if>
+      <if test="carid != null">
+        carid,
+      </if>
+      <if test="floor != null">
+        floor,
+      </if>
+      <if test="assessmentprice != null">
+        assessmentprice,
+      </if>
+      <if test="other != null">
+        other,
+      </if>
+      <if test="auctionnumber != null">
+        auctionnumber,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="auctiontime != null">
+        #{auctiontime,jdbcType=VARCHAR},
+      </if>
+      <if test="cycle != null">
+        #{cycle,jdbcType=VARCHAR},
+      </if>
+      <if test="carid != null">
+        #{carid,jdbcType=VARCHAR},
+      </if>
+      <if test="floor != null">
+        #{floor,jdbcType=VARCHAR},
+      </if>
+      <if test="assessmentprice != null">
+        #{assessmentprice,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null">
+        #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="auctionnumber != null">
+        #{auctionnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.auction.Model.auctioninfo">
+    update auctioninfo
+    <set>
+      <if test="auctiontime != null">
+        auctiontime = #{auctiontime,jdbcType=VARCHAR},
+      </if>
+      <if test="cycle != null">
+        cycle = #{cycle,jdbcType=VARCHAR},
+      </if>
+      <if test="carid != null">
+        carid = #{carid,jdbcType=VARCHAR},
+      </if>
+      <if test="floor != null">
+        floor = #{floor,jdbcType=VARCHAR},
+      </if>
+      <if test="assessmentprice != null">
+        assessmentprice = #{assessmentprice,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null">
+        other = #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="auctionnumber != null">
+        auctionnumber = #{auctionnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.auction.Model.auctioninfo">
+    update auctioninfo
+    set auctiontime = #{auctiontime,jdbcType=VARCHAR},
+      cycle = #{cycle,jdbcType=VARCHAR},
+      carid = #{carid,jdbcType=VARCHAR},
+      floor = #{floor,jdbcType=VARCHAR},
+      assessmentprice = #{assessmentprice,jdbcType=VARCHAR},
+      other = #{other,jdbcType=VARCHAR},
+      auctionnumber = #{auctionnumber,jdbcType=VARCHAR}
+        state = #{state,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+
+
+
+  <resultMap id="BaseResultMap1" type="com.example.auction.Model.acutionListInfo">
+
+    <result column="aucid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    <result column="auctiontime" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="cycle" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="auctionfloor" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="auctionassessmentprice" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="addtime" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="auctionnumber" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <collection property="carList" resultMap="BaseResultMapcar"></collection>
+    <collection property="bidderUserlist"  resultMap="BaseResultMapbidder"></collection>
+  </resultMap>
+
+  <resultMap id="BaseResultMapbidder" type="com.example.auction.Model.BidderUser">
+    <result column="paymentvoucher" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="paymentstate" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="applicationtime" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="banumber" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="totalamount" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="Auctionstate" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="ispaybond" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="username" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="tel" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="certificates" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="address" javaType="java.lang.String" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="BaseResultMapcar" type="com.example.auction.Model.car">
+
+      <result column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <result column="carname" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <result column="carcolor" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <result column="carplatenumber" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <result column="carhostid" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <result column="carframenumber" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <result column="motornumber" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <result column="brandcarseries" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <result column="keynumber" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <result column="actualservicelife" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <result column="onbrandtime" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <result column="drivinglicense" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <result column="assessmentprice" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <result column="accidentvehicle" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <result column="floor" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <result column="assessmentpricetwo" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <result column="carimg" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <result column="other" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <result column="carport" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <result column="cararea" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <result column="caraddress" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <result column="carbosomimg" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <result column="carmotorimg" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <result column="carnumber" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <result column="dealtime" javaType="java.lang.String" jdbcType="VARCHAR" />
+
+  </resultMap>
+
+  <select id="listauctioninfo" resultMap="BaseResultMap1" >
+
+    SELECT
+    ac.aucid,
+    ac.auctiontime,
+    ac.cycle,
+    ac.auctionfloor,
+    ac.auctionassessmentprice,
+    ac.auctionnumber,
+    ac.addtime,
+    ac.id,
+    ac.carname,
+    ac.carcolor,
+    ac.carplatenumber,
+    ac.carhostid,
+    ac.carframenumber,
+    ac.motornumber,
+    ac.brandcarseries,
+    ac.keynumber,
+    ac.actualservicelife,
+    ac.onbrandtime,
+    ac.drivinglicense,
+    ac.assessmentprice,
+    ac.accidentvehicle,
+    ac.floor,
+    ac.assessmentpricetwo,
+    ac.carimg,
+    ac.other,
+    ac.carport,
+    ac.cararea,
+    ac.caraddress,
+    ac.carbosomimg,
+    ac.carmotorimg,
+    ac.carnumber,
+    ac.dealtime,
+    bu.paymentvoucher,
+    bu.paymentstate,
+    bu.applicationtime,
+    bu.banumber,
+    bu.totalamount,
+    bu.Auctionstate,
+    bu.ispaybond,
+    bu.username,
+    bu.tel,
+    bu.certificates,
+    bu.address
+    FROM
+    (
+    SELECT au.id aucid,
+    au.auctiontime,
+    au.cycle,
+    au.floor auctionfloor,
+    au.assessmentprice auctionassessmentprice,
+    au.auctionnumber,
+    au.other addtime,
+    c.id,
+    c.carname,
+    c.carcolor,
+    c.carplatenumber,
+    c.carhostid,
+    c.carframenumber,
+    c.motornumber,
+    c.brandcarseries,
+    c.keynumber,
+    c.actualservicelife,
+    c.onbrandtime,
+    c.drivinglicense,
+    c.assessmentprice,
+    c.accidentvehicle,
+    c.floor,
+    c.assessmentpricetwo,
+    c.carimg,
+    c.other,
+    c.carport,
+    c.cararea,
+    c.caraddress,
+    c.carbosomimg,
+    c.carmotorimg,
+    c.carnumber,
+    c.dealtime
+    FROM
+    auctioninfo au,
+    car c
+    WHERE
+    au.carid = c.id
+    ) ac
+    LEFT JOIN (
+    SELECT
+    b.paymentvoucher,
+    b.paymentstate,
+    b.applicationtime,
+    b.auctionnumber banumber,
+    b.other totalamount,
+    b.Auctionstate,
+    b.ispaybond,
+    u.username,
+    u.tel,
+    u.certificates,
+    u.address
+    FROM
+    bidder b,
+    `user` u
+    WHERE
+    b.userid = u.id
+    ) bu ON bu.banumber = ac.auctionnumber
+    where 1=1
+    <if test="auctionstate !=null">
+      and bu.Auctionstate=#{auctionstate}
+    </if>
+    order by ac.addtime desc
+
+  </select>
+
+
+
+  <select id="listacutionList" resultType="com.example.auction.Model.auctioninfo">
+    select
+    <include refid="Base_Column_List" />
+    from auctioninfo where 1=1
+    <if test="state !=null">
+      and state=#{state}
+    </if>
+
+  </select>
+
+</mapper>

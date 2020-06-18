@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.auction.Dao.carDao">
+  <resultMap id="BaseResultMap" type="com.example.auction.Model.car">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="carname" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="carcolor" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="carplatenumber" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="carhostid" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="carframenumber" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="motornumber" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="brandcarseries" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="keynumber" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="actualservicelife" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="onbrandtime" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="drivinglicense" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="assessmentprice" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="accidentvehicle" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="floor" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="assessmentpricetwo" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="carimg" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="other" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="carport" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="cararea" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="caraddress" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="carbosomimg" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="carmotorimg" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="carnumber" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="dealtime" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, carname, carcolor, carplatenumber, carhostid, carframenumber, motornumber, brandcarseries, 
+    keynumber, actualservicelife, onbrandtime, drivinglicense, assessmentprice, accidentvehicle, 
+    floor, assessmentpricetwo, carimg, other, carport, cararea, caraddress, carbosomimg, 
+    carmotorimg, carnumber, dealtime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from car
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from car
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.auction.Model.car">
+    insert into car (id, carname, carcolor, 
+      carplatenumber, carhostid, carframenumber, 
+      motornumber, brandcarseries, keynumber, 
+      actualservicelife, onbrandtime, drivinglicense, 
+      assessmentprice, accidentvehicle, floor, 
+      assessmentpricetwo, carimg, other, 
+      carport, cararea, caraddress, 
+      carbosomimg, carmotorimg, carnumber, 
+      dealtime)
+    values (#{id,jdbcType=INTEGER}, #{carname,jdbcType=VARCHAR}, #{carcolor,jdbcType=VARCHAR}, 
+      #{carplatenumber,jdbcType=VARCHAR}, #{carhostid,jdbcType=VARCHAR}, #{carframenumber,jdbcType=VARCHAR}, 
+      #{motornumber,jdbcType=VARCHAR}, #{brandcarseries,jdbcType=VARCHAR}, #{keynumber,jdbcType=INTEGER}, 
+      #{actualservicelife,jdbcType=INTEGER}, #{onbrandtime,jdbcType=VARCHAR}, #{drivinglicense,jdbcType=VARCHAR}, 
+      #{assessmentprice,jdbcType=VARCHAR}, #{accidentvehicle,jdbcType=VARCHAR}, #{floor,jdbcType=VARCHAR}, 
+      #{assessmentpricetwo,jdbcType=VARCHAR}, #{carimg,jdbcType=VARCHAR}, #{other,jdbcType=VARCHAR}, 
+      #{carport,jdbcType=VARCHAR}, #{cararea,jdbcType=VARCHAR}, #{caraddress,jdbcType=VARCHAR}, 
+      #{carbosomimg,jdbcType=VARCHAR}, #{carmotorimg,jdbcType=VARCHAR}, #{carnumber,jdbcType=VARCHAR}, 
+      #{dealtime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.auction.Model.car">
+    insert into car
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="carname != null">
+        carname,
+      </if>
+      <if test="carcolor != null">
+        carcolor,
+      </if>
+      <if test="carplatenumber != null">
+        carplatenumber,
+      </if>
+      <if test="carhostid != null">
+        carhostid,
+      </if>
+      <if test="carframenumber != null">
+        carframenumber,
+      </if>
+      <if test="motornumber != null">
+        motornumber,
+      </if>
+      <if test="brandcarseries != null">
+        brandcarseries,
+      </if>
+      <if test="keynumber != null">
+        keynumber,
+      </if>
+      <if test="actualservicelife != null">
+        actualservicelife,
+      </if>
+      <if test="onbrandtime != null">
+        onbrandtime,
+      </if>
+      <if test="drivinglicense != null">
+        drivinglicense,
+      </if>
+      <if test="assessmentprice != null">
+        assessmentprice,
+      </if>
+      <if test="accidentvehicle != null">
+        accidentvehicle,
+      </if>
+      <if test="floor != null">
+        floor,
+      </if>
+      <if test="assessmentpricetwo != null">
+        assessmentpricetwo,
+      </if>
+      <if test="carimg != null">
+        carimg,
+      </if>
+      <if test="other != null">
+        other,
+      </if>
+      <if test="carport != null">
+        carport,
+      </if>
+      <if test="cararea != null">
+        cararea,
+      </if>
+      <if test="caraddress != null">
+        caraddress,
+      </if>
+      <if test="carbosomimg != null">
+        carbosomimg,
+      </if>
+      <if test="carmotorimg != null">
+        carmotorimg,
+      </if>
+      <if test="carnumber != null">
+        carnumber,
+      </if>
+      <if test="dealtime != null">
+        dealtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="carname != null">
+        #{carname,jdbcType=VARCHAR},
+      </if>
+      <if test="carcolor != null">
+        #{carcolor,jdbcType=VARCHAR},
+      </if>
+      <if test="carplatenumber != null">
+        #{carplatenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="carhostid != null">
+        #{carhostid,jdbcType=VARCHAR},
+      </if>
+      <if test="carframenumber != null">
+        #{carframenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="motornumber != null">
+        #{motornumber,jdbcType=VARCHAR},
+      </if>
+      <if test="brandcarseries != null">
+        #{brandcarseries,jdbcType=VARCHAR},
+      </if>
+      <if test="keynumber != null">
+        #{keynumber,jdbcType=INTEGER},
+      </if>
+      <if test="actualservicelife != null">
+        #{actualservicelife,jdbcType=INTEGER},
+      </if>
+      <if test="onbrandtime != null">
+        #{onbrandtime,jdbcType=VARCHAR},
+      </if>
+      <if test="drivinglicense != null">
+        #{drivinglicense,jdbcType=VARCHAR},
+      </if>
+      <if test="assessmentprice != null">
+        #{assessmentprice,jdbcType=VARCHAR},
+      </if>
+      <if test="accidentvehicle != null">
+        #{accidentvehicle,jdbcType=VARCHAR},
+      </if>
+      <if test="floor != null">
+        #{floor,jdbcType=VARCHAR},
+      </if>
+      <if test="assessmentpricetwo != null">
+        #{assessmentpricetwo,jdbcType=VARCHAR},
+      </if>
+      <if test="carimg != null">
+        #{carimg,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null">
+        #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="carport != null">
+        #{carport,jdbcType=VARCHAR},
+      </if>
+      <if test="cararea != null">
+        #{cararea,jdbcType=VARCHAR},
+      </if>
+      <if test="caraddress != null">
+        #{caraddress,jdbcType=VARCHAR},
+      </if>
+      <if test="carbosomimg != null">
+        #{carbosomimg,jdbcType=VARCHAR},
+      </if>
+      <if test="carmotorimg != null">
+        #{carmotorimg,jdbcType=VARCHAR},
+      </if>
+      <if test="carnumber != null">
+        #{carnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="dealtime != null">
+        #{dealtime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.auction.Model.car">
+    update car
+    <set>
+      <if test="carname != null">
+        carname = #{carname,jdbcType=VARCHAR},
+      </if>
+      <if test="carcolor != null">
+        carcolor = #{carcolor,jdbcType=VARCHAR},
+      </if>
+      <if test="carplatenumber != null">
+        carplatenumber = #{carplatenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="carhostid != null">
+        carhostid = #{carhostid,jdbcType=VARCHAR},
+      </if>
+      <if test="carframenumber != null">
+        carframenumber = #{carframenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="motornumber != null">
+        motornumber = #{motornumber,jdbcType=VARCHAR},
+      </if>
+      <if test="brandcarseries != null">
+        brandcarseries = #{brandcarseries,jdbcType=VARCHAR},
+      </if>
+      <if test="keynumber != null">
+        keynumber = #{keynumber,jdbcType=INTEGER},
+      </if>
+      <if test="actualservicelife != null">
+        actualservicelife = #{actualservicelife,jdbcType=INTEGER},
+      </if>
+      <if test="onbrandtime != null">
+        onbrandtime = #{onbrandtime,jdbcType=VARCHAR},
+      </if>
+      <if test="drivinglicense != null">
+        drivinglicense = #{drivinglicense,jdbcType=VARCHAR},
+      </if>
+      <if test="assessmentprice != null">
+        assessmentprice = #{assessmentprice,jdbcType=VARCHAR},
+      </if>
+      <if test="accidentvehicle != null">
+        accidentvehicle = #{accidentvehicle,jdbcType=VARCHAR},
+      </if>
+      <if test="floor != null">
+        floor = #{floor,jdbcType=VARCHAR},
+      </if>
+      <if test="assessmentpricetwo != null">
+        assessmentpricetwo = #{assessmentpricetwo,jdbcType=VARCHAR},
+      </if>
+      <if test="carimg != null">
+        carimg = #{carimg,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null">
+        other = #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="carport != null">
+        carport = #{carport,jdbcType=VARCHAR},
+      </if>
+      <if test="cararea != null">
+        cararea = #{cararea,jdbcType=VARCHAR},
+      </if>
+      <if test="caraddress != null">
+        caraddress = #{caraddress,jdbcType=VARCHAR},
+      </if>
+      <if test="carbosomimg != null">
+        carbosomimg = #{carbosomimg,jdbcType=VARCHAR},
+      </if>
+      <if test="carmotorimg != null">
+        carmotorimg = #{carmotorimg,jdbcType=VARCHAR},
+      </if>
+      <if test="carnumber != null">
+        carnumber = #{carnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="dealtime != null">
+        dealtime = #{dealtime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.auction.Model.car">
+    update car
+    set carname = #{carname,jdbcType=VARCHAR},
+      carcolor = #{carcolor,jdbcType=VARCHAR},
+      carplatenumber = #{carplatenumber,jdbcType=VARCHAR},
+      carhostid = #{carhostid,jdbcType=VARCHAR},
+      carframenumber = #{carframenumber,jdbcType=VARCHAR},
+      motornumber = #{motornumber,jdbcType=VARCHAR},
+      brandcarseries = #{brandcarseries,jdbcType=VARCHAR},
+      keynumber = #{keynumber,jdbcType=INTEGER},
+      actualservicelife = #{actualservicelife,jdbcType=INTEGER},
+      onbrandtime = #{onbrandtime,jdbcType=VARCHAR},
+      drivinglicense = #{drivinglicense,jdbcType=VARCHAR},
+      assessmentprice = #{assessmentprice,jdbcType=VARCHAR},
+      accidentvehicle = #{accidentvehicle,jdbcType=VARCHAR},
+      floor = #{floor,jdbcType=VARCHAR},
+      assessmentpricetwo = #{assessmentpricetwo,jdbcType=VARCHAR},
+      carimg = #{carimg,jdbcType=VARCHAR},
+      other = #{other,jdbcType=VARCHAR},
+      carport = #{carport,jdbcType=VARCHAR},
+      cararea = #{cararea,jdbcType=VARCHAR},
+      caraddress = #{caraddress,jdbcType=VARCHAR},
+      carbosomimg = #{carbosomimg,jdbcType=VARCHAR},
+      carmotorimg = #{carmotorimg,jdbcType=VARCHAR},
+      carnumber = #{carnumber,jdbcType=VARCHAR},
+      dealtime = #{dealtime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <select id="carlist"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from car
+    where 1=1
+    <if test="carnumber !=null">
+      and carnumber=#{carnumber}
+    </if>
+    <if test="carname !=null">
+     and  carname=#{carname}
+    </if>
+
+    order by dealtime desc
+  </select>
+</mapper>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.auction.Dao.Userdao">
+  <insert id="addUser" parameterType="com.example.auction.Model.User" >
+    insert into user (id,username,tel,sex,certificates,address,other)
+    values (#{id,jdbcType=INTEGER},#{username,jdbcType=VARCHAR},#{tel,jdbcType=VARCHAR},#{sex,jdbcType=VARCHAR},
+    #{certificates,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR},#{other,jdbcType=VARCHAR}
+    )
+
+  </insert>
+  <select id="listUser" parameterType="java.util.Map" resultType="java.util.Map">
+    SELECT u.*,b.* from user u,bidder b where u.id=b.userid
+    <if test="tel !=null">
+      and u.tel=#{tel}
+    </if>
+    <if test=" auctionnumber !=null">
+      and b.auctionnumber=#{auctionnumber}
+    </if>
+    order by b.applicationtime desc
+  </select>
+
+
+  <select id="bondList" resultType="java.util.Map">
+   SELECT bc.*,u.username from `user` u,biddercompany bc where u.id=bc.userid
+   <if test="companytel !=null">
+     and bc.companytel=#{companytel}
+   </if>
+    order by bc.updateday desc
+  </select>
+  <select id="selectbidderList" resultType="java.util.Map">
+    SELECT u.*,b.* from `user` u,bidder b where u.id=b.userid
+    <if test="auctionnumber !=null">
+      and b.auctionnumber=#{auctionnumber}
+    </if>
+  </select>
+
+</mapper>
