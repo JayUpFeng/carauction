@@ -1,57 +1,85 @@
 package com.example.auction.Model;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
+
 public class car {
     private Integer id;
-
+    @Excel(name = "车型")
     private String carname;
-
+    @Excel(name = "车辆颜色")
     private String carcolor;
-
+    @Excel(name = "车牌号")
     private String carplatenumber;
-
+    @Excel(name = "车主姓名")
     private String carhostid;
-
+    @Excel(name = "车架号")
     private String carframenumber;
-
+    @Excel(name = "发动机号")
     private String motornumber;
-
+    @Excel(name = "品牌")
     private String brandcarseries;
-
-    private Integer keynumber;
-
-    private Integer actualservicelife;
-
+    @Excel(name = "钥匙数量")
+    private String keynumber;
+    @Excel(name = "行驶里程")
+    private String actualservicelife;
+    @Excel(name = "上牌日期")
     private String onbrandtime;
-
+    @Excel(name = "行驶证")
     private String drivinglicense;
-
+    @Excel(name = "评估价")
     private String assessmentprice;
-
+    @Excel(name = "是否事故车")
     private String accidentvehicle;
-
+    @Excel(name = "底价")
     private String floor;
-
     private String assessmentpricetwo;
-
+    @Excel(name = "车外图片上传")
     private String carimg;
-
     private String other;
-
+    @Excel(name = "车库名称")
     private String carport;
-
     private String cararea;
-
     private String caraddress;
-
+    @Excel(name = "车内部图片上传")
     private String carbosomimg;
-
+    @Excel(name = "车发动机图片上传")
     private String carmotorimg;
-
     private String carnumber;
-
     private String dealtime;
+    private String inspectionhttp;
+    @Excel(name = "车系")
+    private String vehiclesys;
+    private String jurisdiction;
+    private String carthumbnail;
+    //0：上线 1：储备
+    @Excel(name = "状态", replace = {"上线_0", "储备_1"})
+    private String carstate;
+    //批号
+    @Excel(name = "批号")
+    private String batchnumber;
+    //报告连接地址
+    private String reporturl;
+    //保险截止日期
+    @Excel(name = "保险截止",importFormat="yyyy/MM/dd")
+    private Date insuranceexpiredate;
+    //数据库保存字段
+    private String insuranceexpire;
+    //年险截止日期
+    @Excel(name = "年险截止",importFormat="yyyy/MM/dd")
+    private Date yearexpiredate;
+    //数据库保存字段
+    private String yearexpire;
+    public car() {
+        super();
+    }
 
-    public car(Integer id, String carname, String carcolor, String carplatenumber, String carhostid, String carframenumber, String motornumber, String brandcarseries, Integer keynumber, Integer actualservicelife, String onbrandtime, String drivinglicense, String assessmentprice, String accidentvehicle, String floor, String assessmentpricetwo, String carimg, String other, String carport, String cararea, String caraddress, String carbosomimg, String carmotorimg, String carnumber, String dealtime) {
+    public car(Integer id, String carname, String carcolor, String carplatenumber, String carhostid, String carframenumber, String motornumber, String brandcarseries, String keynumber, String actualservicelife, String onbrandtime, String drivinglicense, String assessmentprice, String accidentvehicle, String floor, String assessmentpricetwo, String carimg, String other, String carport, String cararea, String caraddress, String carbosomimg, String carmotorimg, String carnumber, String dealtime, String inspectionhttp, String vehiclesys, String jurisdiction, String carthumbnail, String carstate, String batchnumber, String reporturl,
+               String insuranceexpire,String yearexpire
+    ) {
         this.id = id;
         this.carname = carname;
         this.carcolor = carcolor;
@@ -77,10 +105,31 @@ public class car {
         this.carmotorimg = carmotorimg;
         this.carnumber = carnumber;
         this.dealtime = dealtime;
+        this.inspectionhttp = inspectionhttp;
+        this.vehiclesys = vehiclesys;
+        this.jurisdiction = jurisdiction;
+        this.carthumbnail = carthumbnail;
+        this.carstate = carstate;
+        this.batchnumber = batchnumber;
+        this.reporturl = reporturl;
+        this.insuranceexpire = insuranceexpire;
+        this.yearexpire = yearexpire;
     }
 
-    public car() {
-        super();
+    public String getCarthumbnail() {
+        return carthumbnail;
+    }
+
+    public void setCarthumbnail(String carthumbnail) {
+        this.carthumbnail = carthumbnail;
+    }
+
+    public String getJurisdiction() {
+        return jurisdiction;
+    }
+
+    public void setJurisdiction(String jurisdiction) {
+        this.jurisdiction = jurisdiction;
     }
 
     public Integer getId() {
@@ -96,7 +145,7 @@ public class car {
     }
 
     public void setCarname(String carname) {
-        this.carname = carname == null ? null : carname.trim();
+        this.carname = carname;
     }
 
     public String getCarcolor() {
@@ -104,7 +153,7 @@ public class car {
     }
 
     public void setCarcolor(String carcolor) {
-        this.carcolor = carcolor == null ? null : carcolor.trim();
+        this.carcolor = carcolor;
     }
 
     public String getCarplatenumber() {
@@ -112,7 +161,7 @@ public class car {
     }
 
     public void setCarplatenumber(String carplatenumber) {
-        this.carplatenumber = carplatenumber == null ? null : carplatenumber.trim();
+        this.carplatenumber = carplatenumber;
     }
 
     public String getCarhostid() {
@@ -120,7 +169,7 @@ public class car {
     }
 
     public void setCarhostid(String carhostid) {
-        this.carhostid = carhostid == null ? null : carhostid.trim();
+        this.carhostid = carhostid;
     }
 
     public String getCarframenumber() {
@@ -128,7 +177,7 @@ public class car {
     }
 
     public void setCarframenumber(String carframenumber) {
-        this.carframenumber = carframenumber == null ? null : carframenumber.trim();
+        this.carframenumber = carframenumber;
     }
 
     public String getMotornumber() {
@@ -136,7 +185,7 @@ public class car {
     }
 
     public void setMotornumber(String motornumber) {
-        this.motornumber = motornumber == null ? null : motornumber.trim();
+        this.motornumber = motornumber;
     }
 
     public String getBrandcarseries() {
@@ -144,22 +193,22 @@ public class car {
     }
 
     public void setBrandcarseries(String brandcarseries) {
-        this.brandcarseries = brandcarseries == null ? null : brandcarseries.trim();
+        this.brandcarseries = brandcarseries;
     }
 
-    public Integer getKeynumber() {
+    public String getKeynumber() {
         return keynumber;
     }
 
-    public void setKeynumber(Integer keynumber) {
+    public void setKeynumber(String keynumber) {
         this.keynumber = keynumber;
     }
 
-    public Integer getActualservicelife() {
+    public String getActualservicelife() {
         return actualservicelife;
     }
 
-    public void setActualservicelife(Integer actualservicelife) {
+    public void setActualservicelife(String actualservicelife) {
         this.actualservicelife = actualservicelife;
     }
 
@@ -168,7 +217,7 @@ public class car {
     }
 
     public void setOnbrandtime(String onbrandtime) {
-        this.onbrandtime = onbrandtime == null ? null : onbrandtime.trim();
+        this.onbrandtime = onbrandtime;
     }
 
     public String getDrivinglicense() {
@@ -176,7 +225,7 @@ public class car {
     }
 
     public void setDrivinglicense(String drivinglicense) {
-        this.drivinglicense = drivinglicense == null ? null : drivinglicense.trim();
+        this.drivinglicense = drivinglicense;
     }
 
     public String getAssessmentprice() {
@@ -184,7 +233,7 @@ public class car {
     }
 
     public void setAssessmentprice(String assessmentprice) {
-        this.assessmentprice = assessmentprice == null ? null : assessmentprice.trim();
+        this.assessmentprice = assessmentprice;
     }
 
     public String getAccidentvehicle() {
@@ -192,7 +241,7 @@ public class car {
     }
 
     public void setAccidentvehicle(String accidentvehicle) {
-        this.accidentvehicle = accidentvehicle == null ? null : accidentvehicle.trim();
+        this.accidentvehicle = accidentvehicle;
     }
 
     public String getFloor() {
@@ -200,7 +249,7 @@ public class car {
     }
 
     public void setFloor(String floor) {
-        this.floor = floor == null ? null : floor.trim();
+        this.floor = floor;
     }
 
     public String getAssessmentpricetwo() {
@@ -208,7 +257,7 @@ public class car {
     }
 
     public void setAssessmentpricetwo(String assessmentpricetwo) {
-        this.assessmentpricetwo = assessmentpricetwo == null ? null : assessmentpricetwo.trim();
+        this.assessmentpricetwo = assessmentpricetwo;
     }
 
     public String getCarimg() {
@@ -216,7 +265,7 @@ public class car {
     }
 
     public void setCarimg(String carimg) {
-        this.carimg = carimg == null ? null : carimg.trim();
+        this.carimg = carimg;
     }
 
     public String getOther() {
@@ -224,7 +273,7 @@ public class car {
     }
 
     public void setOther(String other) {
-        this.other = other == null ? null : other.trim();
+        this.other = other;
     }
 
     public String getCarport() {
@@ -232,7 +281,7 @@ public class car {
     }
 
     public void setCarport(String carport) {
-        this.carport = carport == null ? null : carport.trim();
+        this.carport = carport;
     }
 
     public String getCararea() {
@@ -240,7 +289,7 @@ public class car {
     }
 
     public void setCararea(String cararea) {
-        this.cararea = cararea == null ? null : cararea.trim();
+        this.cararea = cararea;
     }
 
     public String getCaraddress() {
@@ -248,7 +297,7 @@ public class car {
     }
 
     public void setCaraddress(String caraddress) {
-        this.caraddress = caraddress == null ? null : caraddress.trim();
+        this.caraddress = caraddress;
     }
 
     public String getCarbosomimg() {
@@ -256,7 +305,7 @@ public class car {
     }
 
     public void setCarbosomimg(String carbosomimg) {
-        this.carbosomimg = carbosomimg == null ? null : carbosomimg.trim();
+        this.carbosomimg = carbosomimg;
     }
 
     public String getCarmotorimg() {
@@ -264,7 +313,7 @@ public class car {
     }
 
     public void setCarmotorimg(String carmotorimg) {
-        this.carmotorimg = carmotorimg == null ? null : carmotorimg.trim();
+        this.carmotorimg = carmotorimg;
     }
 
     public String getCarnumber() {
@@ -272,7 +321,7 @@ public class car {
     }
 
     public void setCarnumber(String carnumber) {
-        this.carnumber = carnumber == null ? null : carnumber.trim();
+        this.carnumber = carnumber;
     }
 
     public String getDealtime() {
@@ -280,6 +329,118 @@ public class car {
     }
 
     public void setDealtime(String dealtime) {
-        this.dealtime = dealtime == null ? null : dealtime.trim();
+        this.dealtime = dealtime;
+    }
+
+    public String getInspectionhttp() {
+        return inspectionhttp;
+    }
+
+    public void setInspectionhttp(String inspectionhttp) {
+        this.inspectionhttp = inspectionhttp;
+    }
+
+    public String getVehiclesys() {
+        return vehiclesys;
+    }
+
+    public void setVehiclesys(String vehiclesys) {
+        this.vehiclesys = vehiclesys;
+    }
+
+    public String getCarstate() {
+        return carstate;
+    }
+
+    public void setCarstate(String carstate) {
+        this.carstate = carstate;
+    }
+
+    public String getBatchnumber() {
+        return batchnumber;
+    }
+
+    public void setBatchnumber(String batchnumber) {
+        this.batchnumber = batchnumber;
+    }
+
+    public String getReporturl() {
+        return reporturl;
+    }
+
+    public void setReporturl(String reporturl) {
+        this.reporturl = reporturl;
+    }
+
+    public void setInsuranceexpire(String insuranceexpire) {
+        this.insuranceexpire = insuranceexpire;
+    }
+
+    public void setYearexpire(String yearexpire) {
+        this.yearexpire = yearexpire;
+    }
+
+    public String getInsuranceexpire() {
+        return insuranceexpire;
+    }
+
+    public String getYearexpire() {
+        return yearexpire;
+    }
+
+    public Date getInsuranceexpiredate() {
+        return insuranceexpiredate;
+    }
+
+    public Date getYearexpiredate() {
+        return yearexpiredate;
+    }
+
+    public void setInsuranceexpiredate(Date insuranceexpiredate) {
+        this.insuranceexpiredate = insuranceexpiredate;
+    }
+
+    public void setYearexpiredate(Date yearexpiredate) {
+        this.yearexpiredate = yearexpiredate;
+    }
+
+    @Override
+    public String toString() {
+        return "car{" +
+                "id=" + id +
+                ", carname='" + carname + '\'' +
+                ", carcolor='" + carcolor + '\'' +
+                ", carplatenumber='" + carplatenumber + '\'' +
+                ", carhostid='" + carhostid + '\'' +
+                ", carframenumber='" + carframenumber + '\'' +
+                ", motornumber='" + motornumber + '\'' +
+                ", brandcarseries='" + brandcarseries + '\'' +
+                ", keynumber='" + keynumber + '\'' +
+                ", actualservicelife='" + actualservicelife + '\'' +
+                ", onbrandtime='" + onbrandtime + '\'' +
+                ", drivinglicense='" + drivinglicense + '\'' +
+                ", assessmentprice='" + assessmentprice + '\'' +
+                ", accidentvehicle='" + accidentvehicle + '\'' +
+                ", floor='" + floor + '\'' +
+                ", assessmentpricetwo='" + assessmentpricetwo + '\'' +
+                ", carimg='" + carimg + '\'' +
+                ", other='" + other + '\'' +
+                ", carport='" + carport + '\'' +
+                ", cararea='" + cararea + '\'' +
+                ", caraddress='" + caraddress + '\'' +
+                ", carbosomimg='" + carbosomimg + '\'' +
+                ", carmotorimg='" + carmotorimg + '\'' +
+                ", carnumber='" + carnumber + '\'' +
+                ", dealtime='" + dealtime + '\'' +
+                ", inspectionhttp='" + inspectionhttp + '\'' +
+                ", vehiclesys='" + vehiclesys + '\'' +
+                ", jurisdiction='" + jurisdiction + '\'' +
+                ", carthumbnail='" + carthumbnail + '\'' +
+                ", carstate='" + carstate + '\'' +
+                ", batchnumber='" + batchnumber + '\'' +
+                ", reporturl='" + reporturl + '\'' +
+                ", insuranceexpire='" + insuranceexpire + '\'' +
+                ", yearexpire='" + yearexpire + '\'' +
+                '}';
     }
 }

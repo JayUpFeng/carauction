@@ -1,6 +1,8 @@
 package com.example.auction.Model;
 
-public class bidder {
+import java.util.List;
+
+public class bidderoffer {
     private Integer id;
 
     private Integer userid;
@@ -15,7 +17,7 @@ public class bidder {
 
     private String auctionnumber;
 
-    private Integer other;
+    private String other;
 
     private String auctionstate;
 
@@ -32,13 +34,10 @@ public class bidder {
     private String seecartime;
 
     private String seecarmancertificates;
-    private String isviolations;
-    //更新时间
-    private String updatetime;
-    //车辆图片地址
-    private String carimg;
 
-    public bidder(Integer id, Integer userid, String carid, String paymentvoucher, String paymentstate, String applicationtime, String auctionnumber, Integer other, String auctionstate, String offerid, Integer auctioninfoid, String ispaybond, String appointmentseecarname, String appointmentseecartel, String seecartime, String seecarmancertificates, String isviolations, String updatetime, String carimg) {
+    private List<offerinfo> offerinfoList;
+
+    public bidderoffer(Integer id, Integer userid, String carid, String paymentvoucher, String paymentstate, String applicationtime, String auctionnumber, String other, String auctionstate, String offerid, Integer auctioninfoid, String ispaybond, String appointmentseecarname, String appointmentseecartel, String seecartime, String seecarmancertificates, List<offerinfo> offerinfoList) {
         this.id = id;
         this.userid = userid;
         this.carid = carid;
@@ -55,20 +54,18 @@ public class bidder {
         this.appointmentseecartel = appointmentseecartel;
         this.seecartime = seecartime;
         this.seecarmancertificates = seecarmancertificates;
-        this.isviolations = isviolations;
-        this.updatetime = updatetime;
-        this.carimg = carimg;
+        this.offerinfoList = offerinfoList;
     }
 
-    public String getIsviolations() {
-        return isviolations;
+    public List<offerinfo> getOfferinfoList() {
+        return offerinfoList;
     }
 
-    public void setIsviolations(String isviolations) {
-        this.isviolations = isviolations;
+    public void setOfferinfoList(List<offerinfo> offerinfoList) {
+        this.offerinfoList = offerinfoList;
     }
 
-    public bidder() {
+    public bidderoffer() {
         super();
     }
 
@@ -129,12 +126,12 @@ public class bidder {
         this.auctionnumber = auctionnumber == null ? null : auctionnumber.trim();
     }
 
-    public Integer getOther() {
+    public String getOther() {
         return other;
     }
 
-    public void setOther(Integer other) {
-        this.other = other;
+    public void setOther(String other) {
+        this.other = other == null ? null : other.trim();
     }
 
     public String getAuctionstate() {
@@ -201,19 +198,5 @@ public class bidder {
         this.seecarmancertificates = seecarmancertificates == null ? null : seecarmancertificates.trim();
     }
 
-    public String getUpdatetime() {
-        return updatetime;
-    }
 
-    public void setUpdatetime(String updatetime) {
-        this.updatetime = updatetime;
-    }
-
-    public String getCarimg() {
-        return carimg;
-    }
-
-    public void setCarimg(String carimg) {
-        this.carimg = carimg;
-    }
 }

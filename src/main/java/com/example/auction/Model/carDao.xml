@@ -11,8 +11,8 @@
       <arg column="carframenumber" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="motornumber" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="brandcarseries" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="keynumber" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="actualservicelife" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="keynumber" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="actualservicelife" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="onbrandtime" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="drivinglicense" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="assessmentprice" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -28,43 +28,65 @@
       <arg column="carmotorimg" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="carnumber" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="dealtime" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="inspectionhttp" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="vehiclesys" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="jurisdiction" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="carthumbnail" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="carstate" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="batchnumber" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="reporturl" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="insuranceexpire" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="yearexpire" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List">
-    id, carname, carcolor, carplatenumber, carhostid, carframenumber, motornumber, brandcarseries, 
-    keynumber, actualservicelife, onbrandtime, drivinglicense, assessmentprice, accidentvehicle, 
-    floor, assessmentpricetwo, carimg, other, carport, cararea, caraddress, carbosomimg, 
-    carmotorimg, carnumber, dealtime
+    id, carname, carcolor, carplatenumber, carhostid, carframenumber, motornumber, brandcarseries,
+    keynumber, actualservicelife, onbrandtime, drivinglicense, assessmentprice, accidentvehicle,
+    floor, assessmentpricetwo, carimg, other, carport, cararea, caraddress, carbosomimg,
+    carmotorimg, carnumber, dealtime,inspectionhttp,vehiclesys,jurisdiction,carthumbnail,carstate,batchnumber,reporturl,
+    insuranceexpire,yearexpire
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from car
     where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAllByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from car c
+    <where>
+      c.id in
+      <foreach collection="list" index="index" separator="," item="item" open="(" close=")">
+        #{item}
+      </foreach>
+    </where>
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from car
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.example.auction.Model.car">
-    insert into car (id, carname, carcolor, 
-      carplatenumber, carhostid, carframenumber, 
-      motornumber, brandcarseries, keynumber, 
-      actualservicelife, onbrandtime, drivinglicense, 
-      assessmentprice, accidentvehicle, floor, 
-      assessmentpricetwo, carimg, other, 
-      carport, cararea, caraddress, 
-      carbosomimg, carmotorimg, carnumber, 
-      dealtime)
-    values (#{id,jdbcType=INTEGER}, #{carname,jdbcType=VARCHAR}, #{carcolor,jdbcType=VARCHAR}, 
-      #{carplatenumber,jdbcType=VARCHAR}, #{carhostid,jdbcType=VARCHAR}, #{carframenumber,jdbcType=VARCHAR}, 
-      #{motornumber,jdbcType=VARCHAR}, #{brandcarseries,jdbcType=VARCHAR}, #{keynumber,jdbcType=INTEGER}, 
-      #{actualservicelife,jdbcType=INTEGER}, #{onbrandtime,jdbcType=VARCHAR}, #{drivinglicense,jdbcType=VARCHAR}, 
-      #{assessmentprice,jdbcType=VARCHAR}, #{accidentvehicle,jdbcType=VARCHAR}, #{floor,jdbcType=VARCHAR}, 
-      #{assessmentpricetwo,jdbcType=VARCHAR}, #{carimg,jdbcType=VARCHAR}, #{other,jdbcType=VARCHAR}, 
-      #{carport,jdbcType=VARCHAR}, #{cararea,jdbcType=VARCHAR}, #{caraddress,jdbcType=VARCHAR}, 
-      #{carbosomimg,jdbcType=VARCHAR}, #{carmotorimg,jdbcType=VARCHAR}, #{carnumber,jdbcType=VARCHAR}, 
-      #{dealtime,jdbcType=VARCHAR})
+    insert into car (id, carname, carcolor,
+      carplatenumber, carhostid, carframenumber,
+      motornumber, brandcarseries, keynumber,
+      actualservicelife, onbrandtime, drivinglicense,
+      assessmentprice, accidentvehicle, floor,
+      assessmentpricetwo, carimg, other,
+      carport, cararea, caraddress,
+      carbosomimg, carmotorimg, carnumber,
+      dealtime,inspectionhttp,vehiclesys,jurisdiction,carthumbnail)
+    values (#{id,jdbcType=INTEGER}, #{carname,jdbcType=VARCHAR}, #{carcolor,jdbcType=VARCHAR},
+      #{carplatenumber,jdbcType=VARCHAR}, #{carhostid,jdbcType=VARCHAR}, #{carframenumber,jdbcType=VARCHAR},
+      #{motornumber,jdbcType=VARCHAR}, #{brandcarseries,jdbcType=VARCHAR}, #{keynumber,jdbcType=VARCHAR},
+      #{actualservicelife,jdbcType=VARCHAR}, #{onbrandtime,jdbcType=VARCHAR}, #{drivinglicense,jdbcType=VARCHAR},
+      #{assessmentprice,jdbcType=VARCHAR}, #{accidentvehicle,jdbcType=VARCHAR}, #{floor,jdbcType=VARCHAR},
+      #{assessmentpricetwo,jdbcType=VARCHAR}, #{carimg,jdbcType=VARCHAR}, #{other,jdbcType=VARCHAR},
+      #{carport,jdbcType=VARCHAR}, #{cararea,jdbcType=VARCHAR}, #{caraddress,jdbcType=VARCHAR},
+      #{carbosomimg,jdbcType=VARCHAR}, #{carmotorimg,jdbcType=VARCHAR}, #{carnumber,jdbcType=VARCHAR},
+      #{dealtime,jdbcType=VARCHAR}, #{inspectionhttp,jdbcType=VARCHAR},#{vehiclesys,jdbcType=VARCHAR}，
+      #{jurisdiction,jdbcType=VARCHAR},#{carthumbnail,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.auction.Model.car">
     insert into car
@@ -144,6 +166,33 @@
       <if test="dealtime != null">
         dealtime,
       </if>
+      <if test="inspectionhttp != null">
+        inspectionhttp,
+      </if>
+      <if test="vehiclesys != null">
+        vehiclesys,
+      </if>
+      <if test="jurisdiction != null">
+          jurisdiction,
+      </if>
+      <if test="carthumbnail != null">
+        carthumbnail,
+      </if>
+      <if test="carstate != null">
+        carstate,
+      </if>
+      <if test="batchnumber != null">
+        batchnumber,
+      </if>
+      <if test="reporturl != null">
+        reporturl,
+      </if>
+      <if test="insuranceexpire != null">
+        insuranceexpire,
+      </if>
+      <if test="yearexpire != null">
+        yearexpire
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -171,10 +220,10 @@
         #{brandcarseries,jdbcType=VARCHAR},
       </if>
       <if test="keynumber != null">
-        #{keynumber,jdbcType=INTEGER},
+        #{keynumber,jdbcType=VARCHAR},
       </if>
       <if test="actualservicelife != null">
-        #{actualservicelife,jdbcType=INTEGER},
+        #{actualservicelife,jdbcType=VARCHAR},
       </if>
       <if test="onbrandtime != null">
         #{onbrandtime,jdbcType=VARCHAR},
@@ -221,6 +270,33 @@
       <if test="dealtime != null">
         #{dealtime,jdbcType=VARCHAR},
       </if>
+      <if test="inspectionhttp != null">
+        #{inspectionhttp,jdbcType=VARCHAR},
+      </if>
+      <if test="vehiclesys != null">
+        #{vehiclesys,jdbcType=VARCHAR},
+      </if>
+      <if test="jurisdiction != null">
+        #{jurisdiction,jdbcType=VARCHAR},
+      </if>
+      <if test="carthumbnail != null">
+        #{carthumbnail,jdbcType=VARCHAR},
+      </if>
+      <if test="carstate != null">
+        #{carstate,jdbcType=VARCHAR},
+      </if>
+      <if test="batchnumber != null">
+        #{batchnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="reporturl != null">
+        #{reporturl,jdbcType=VARCHAR},
+      </if>
+      <if test="insuranceexpire != null">
+         #{insuranceexpire,jdbcType=VARCHAR},
+      </if>
+      <if test="yearexpire != null">
+         #{yearexpire,jdbcType=VARCHAR}
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.example.auction.Model.car">
@@ -248,10 +324,10 @@
         brandcarseries = #{brandcarseries,jdbcType=VARCHAR},
       </if>
       <if test="keynumber != null">
-        keynumber = #{keynumber,jdbcType=INTEGER},
+        keynumber = #{keynumber,jdbcType=VARCHAR},
       </if>
       <if test="actualservicelife != null">
-        actualservicelife = #{actualservicelife,jdbcType=INTEGER},
+        actualservicelife = #{actualservicelife,jdbcType=VARCHAR},
       </if>
       <if test="onbrandtime != null">
         onbrandtime = #{onbrandtime,jdbcType=VARCHAR},
@@ -298,6 +374,33 @@
       <if test="dealtime != null">
         dealtime = #{dealtime,jdbcType=VARCHAR},
       </if>
+      <if test="inspectionhttp != null">
+        inspectionhttp = #{inspectionhttp,jdbcType=VARCHAR},
+      </if>
+      <if test="vehiclesys != null">
+        vehiclesys = #{vehiclesys,jdbcType=VARCHAR},
+      </if>
+      <if test="jurisdiction != null">
+          jurisdiction = #{jurisdiction,jdbcType=VARCHAR},
+      </if>
+      <if test="carthumbnail != null">
+        carthumbnail = #{carthumbnail,jdbcType=VARCHAR},
+      </if>
+      <if test="carstate != null">
+        carstate = #{carstate,jdbcType=VARCHAR},
+      </if>
+      <if test="batchnumber != null">
+        batchnumber = #{batchnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="reporturl != null">
+        reporturl = #{reporturl,jdbcType=VARCHAR},
+      </if>
+      <if test="insuranceexpire != null">
+        #{insuranceexpire,jdbcType=VARCHAR},
+      </if>
+      <if test="yearexpire != null">
+        #{yearexpire,jdbcType=VARCHAR}
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -310,8 +413,8 @@
       carframenumber = #{carframenumber,jdbcType=VARCHAR},
       motornumber = #{motornumber,jdbcType=VARCHAR},
       brandcarseries = #{brandcarseries,jdbcType=VARCHAR},
-      keynumber = #{keynumber,jdbcType=INTEGER},
-      actualservicelife = #{actualservicelife,jdbcType=INTEGER},
+      keynumber = #{keynumber,jdbcType=VARCHAR},
+      actualservicelife = #{actualservicelife,jdbcType=VARCHAR},
       onbrandtime = #{onbrandtime,jdbcType=VARCHAR},
       drivinglicense = #{drivinglicense,jdbcType=VARCHAR},
       assessmentprice = #{assessmentprice,jdbcType=VARCHAR},
@@ -326,7 +429,16 @@
       carbosomimg = #{carbosomimg,jdbcType=VARCHAR},
       carmotorimg = #{carmotorimg,jdbcType=VARCHAR},
       carnumber = #{carnumber,jdbcType=VARCHAR},
-      dealtime = #{dealtime,jdbcType=VARCHAR}
+      dealtime = #{dealtime,jdbcType=VARCHAR},
+      inspectionhttp = #{inspectionhttp,jdbcType=VARCHAR},
+      vehiclesys = #{vehiclesys,jdbcType=VARCHAR},
+      jurisdiction = #{jurisdiction,jdbcType=VARCHAR},
+      carthumbnail = #{carthumbnail,jdbcType=VARCHAR},
+      carstate = #{carstate,jdbcType=VARCHAR},
+      batchnumber = #{batchnumber,jdbcType=VARCHAR},
+      reporturl = #{reporturl,jdbcType=VARCHAR}
+      insuranceexpire = #{insuranceexpire,jdbcType=VARCHAR}
+      yearexpire = #{yearexpire,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
@@ -337,12 +449,85 @@
     from car
     where 1=1
     <if test="carnumber !=null">
-      and carnumber=#{carnumber}
+      and carnumber like '%${carnumber}%'
     </if>
     <if test="carname !=null">
-     and  carname=#{carname}
+     and  carname like '%${carname}%'
     </if>
+    <if test="other !=null">
+     and  other=#{other}
+    </if>
+    <if test="jurisdiction !=null">
+     and  jurisdiction=#{jurisdiction}
+    </if>
+    <if test="carframenumber !=null">
+     and  carframenumber  like '%${carframenumber}%'
+    </if>
+    <if test="brandcarseries !=null">
+     and  brandcarseries  like '%${brandcarseries}%'
+    </if>
+    order by id desc
+    limit #{page},#{limit}
+  </select>
+  <select id="countCarList" resultType="long">
+    select count(*) from
+    (select
+    id
+    from car
+    where 1=1
+    <if test="carnumber !=null">
+      and carnumber like '%${carnumber}%'
+    </if>
+    <if test="carname !=null">
+      and  carname like '%${carname}%'
+    </if>
+    <if test="other !=null">
+      and  other=#{other}
+    </if>
+    <if test="jurisdiction !=null">
+      and  jurisdiction=#{jurisdiction}
+    </if>
+    <if test="carframenumber !=null">
+      and  carframenumber  like '%${carframenumber}%'
+    </if>
+    <if test="brandcarseries !=null">
+      and  brandcarseries  like '%${brandcarseries}%'
+    </if>
+    ) c
+  </select>
+    <select id="offercarList" resultType="java.util.Map">
+      SELECT c.*,o.state,o.offer,o.bidderid,o.id offerid from car c LEFT JOIN offerinfo o on c.id=o.carid
+      <if test="bidderid !=null">
+        and
+        o.bidderid=#{bidderid}
+      </if>
+      where 1=1
+      <if test="carid !=null">
+        and c.id=#{carid}
+      </if>
 
-    order by dealtime desc
+
+    </select>
+  <select id="getByIdAndCarFrameNumber" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from car
+    <where>
+      <if test="carframenumber !=null">
+        carframenumber like "%"#{carframenumber}"%"
+      </if>
+    </where>
+    order by id desc
+    limit #{page},#{limit}
+  </select>
+  <select id="getByIdAndCarFrameNumberCount" resultType="int">
+    select
+    count(1)
+    from car
+    <where>
+      <if test="carframenumber !=null">
+        carframenumber like "%"#{carframenumber}"%"
+      </if>
+    </where>
   </select>
 </mapper>

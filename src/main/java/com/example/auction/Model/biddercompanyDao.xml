@@ -17,17 +17,33 @@
       <arg column="contactsaddress" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="payvoucher" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="updateday" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="identityimg" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="creditcode" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="idcarno" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List">
     id, userid, company, companytel, companyaddress, companycertificates, state, other, 
-    bond, contactsname, contactstel, contactsaddress, payvoucher, updateday
+    bond, contactsname, contactstel, contactsaddress, payvoucher, updateday,identityimg,idcarno,creditcode
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from biddercompany
     where id = #{id,jdbcType=INTEGER}
+
+  </select>
+  <select id="selectByUserid" resultType="com.example.auction.Model.biddercompany">
+    select
+    <include refid="Base_Column_List" />
+    from biddercompany
+    where 1=1
+    <if test="userid!=null">
+      and id=(
+      SELECT MAX(id) FROM biddercompany
+      WHERE userid=#{userid}
+      )
+    </if>
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from biddercompany
@@ -38,14 +54,15 @@
       companytel, companyaddress, companycertificates, 
       state, other, bond, 
       contactsname, contactstel, contactsaddress, 
-      payvoucher, updateday)
+      payvoucher, updateday,identityimg,creditcode,idcarno)
     values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{company,jdbcType=VARCHAR}, 
       #{companytel,jdbcType=VARCHAR}, #{companyaddress,jdbcType=VARCHAR}, #{companycertificates,jdbcType=VARCHAR}, 
       #{state,jdbcType=VARCHAR}, #{other,jdbcType=VARCHAR}, #{bond,jdbcType=VARCHAR}, 
       #{contactsname,jdbcType=VARCHAR}, #{contactstel,jdbcType=VARCHAR}, #{contactsaddress,jdbcType=VARCHAR}, 
-      #{payvoucher,jdbcType=VARCHAR}, #{updateday,jdbcType=VARCHAR})
+      #{payvoucher,jdbcType=VARCHAR}, #{updateday,jdbcType=VARCHAR},#{identityimg,jdbcType=VARCHAR},
+      #{creditcode,jdbcType=VARCHAR},#{idcarno,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.example.auction.Model.biddercompany">
+  <insert id="insertSelective" parameterType="com.example.auction.Model.biddercompany" useGeneratedKeys="true" keyProperty="id">
     insert into biddercompany
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -89,6 +106,15 @@
       </if>
       <if test="updateday != null">
         updateday,
+      </if>
+      <if test="identityimg != null">
+        identityimg,
+      </if>
+      <if test="creditcode != null">
+        creditcode,
+      </if>
+      <if test="idcarno != null">
+        idcarno,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -134,14 +160,21 @@
       <if test="updateday != null">
         #{updateday,jdbcType=VARCHAR},
       </if>
+      <if test="identityimg != null">
+        #{identityimg,jdbcType=VARCHAR},
+      </if>
+      <if test="idcarno != null">
+        #{creditcode,jdbcType=VARCHAR},
+      </if>
+      <if test="creditcode != null">
+        #{idcarno,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.example.auction.Model.biddercompany">
     update biddercompany
     <set>
-      <if test="userid != null">
-        userid = #{userid,jdbcType=INTEGER},
-      </if>
+
       <if test="company != null">
         company = #{company,jdbcType=VARCHAR},
       </if>
@@ -178,8 +211,23 @@
       <if test="updateday != null">
         updateday = #{updateday,jdbcType=VARCHAR},
       </if>
+      <if test="identityimg != null">
+        identityimg = #{identityimg,jdbcType=VARCHAR},
+      </if>
+      <if test="creditcode != null">
+        creditcode = #{creditcode,jdbcType=VARCHAR},
+      </if>
+      <if test="idcarno != null">
+        idcarno = #{idcarno,jdbcType=VARCHAR},
+      </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where 1=1
+    <if test="id !=null">
+      and id = #{id,jdbcType=INTEGER}
+    </if>
+    <if test="userid !=null">
+      and userid = #{userid,jdbcType=INTEGER}
+    </if>
   </update>
   <update id="updateByPrimaryKey" parameterType="com.example.auction.Model.biddercompany">
     update biddercompany
@@ -195,7 +243,10 @@
       contactstel = #{contactstel,jdbcType=VARCHAR},
       contactsaddress = #{contactsaddress,jdbcType=VARCHAR},
       payvoucher = #{payvoucher,jdbcType=VARCHAR},
-      updateday = #{updateday,jdbcType=VARCHAR}
+      updateday = #{updateday,jdbcType=VARCHAR},
+      identityimg = #{identityimg,jdbcType=VARCHAR},
+      creditcode = #{creditcode,jdbcType=VARCHAR},
+       idcarno = #{idcarno,jdbcType=VARCHAR},
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

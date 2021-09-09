@@ -30,8 +30,11 @@ public class biddercompany {
     private String payvoucher;
 
     private String updateday;
+    private String identityimg;
+    private String creditcode;
+    private String idcarno;
 
-    public biddercompany(Integer id, Integer userid, String company, String companytel, String companyaddress, String companycertificates, String state, String other, String bond, String contactsname, String contactstel, String contactsaddress, String payvoucher, String updateday) {
+    public biddercompany(Integer id, Integer userid, String company, String companytel, String companyaddress, String companycertificates, String state, String other, String bond, String contactsname, String contactstel, String contactsaddress, String payvoucher, String updateday, String identityimg, String creditcode, String idcarno) {
         this.id = id;
         this.userid = userid;
         this.company = company;
@@ -46,6 +49,25 @@ public class biddercompany {
         this.contactsaddress = contactsaddress;
         this.payvoucher = payvoucher;
         this.updateday = updateday;
+        this.identityimg = identityimg;
+        this.creditcode = creditcode;
+        this.idcarno = idcarno;
+    }
+
+    public String getCreditcode() {
+        return creditcode;
+    }
+
+    public void setCreditcode(String creditcode) {
+        this.creditcode = creditcode;
+    }
+
+    public String getIdcarno() {
+        return idcarno;
+    }
+
+    public void setIdcarno(String idcarno) {
+        this.idcarno = idcarno;
     }
 
     public biddercompany() {
@@ -162,5 +184,13 @@ public class biddercompany {
 
     public void setUpdateday(String updateday) {
         this.updateday = updateday;
+    }
+
+    public String getIdentityimg() {
+        return identityimg;
+    }
+
+    public void setIdentityimg(String identityimg) {
+        this.identityimg = identityimg;
     }
 }

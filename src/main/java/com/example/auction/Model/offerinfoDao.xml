@@ -19,10 +19,40 @@
     from offerinfo
     where id = #{id,jdbcType=INTEGER}
   </select>
+    <select id="selectBybidderid" resultType="com.example.auction.Model.offerinfo">
+      select
+      *
+      from offerinfo
+      where 1=1
+      <if test="bidderid !=null">
+        and bidderid = #{bidderid}
+      </if>
+
+
+    </select>
+  <select id="selectBybidderidandcarid" resultType="com.example.auction.Model.offerinfo">
+    select
+    *
+    from offerinfo
+    where 1=1
+    <if test="bidderid !=null">
+      and bidderid = #{bidderid}
+    </if>
+    <if test="carid !=null">
+      and carid = #{carid}
+    </if>
+
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from offerinfo
     where id = #{id,jdbcType=INTEGER}
   </delete>
+
+  <delete id="del">
+    delete from offerinfo
+    where bidderid=#{bidderid} and carid=#{carid}
+  </delete>
+
   <insert id="insert" parameterType="com.example.auction.Model.offerinfo">
     insert into offerinfo (id, offer, bidderid, 
       carid, state)

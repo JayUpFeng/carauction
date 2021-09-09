@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.auction.Dao.Userdao">
+    <insert id="addUser" parameterType="com.example.auction.Model.Userinfo" useGeneratedKeys="true" keyProperty="id">
+        insert into userinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="username != null">
+                username,
+            </if>
+            <if test="tel != null">
+                tel,
+            </if>
+            <if test="sex != null">
+                sex,
+            </if>
+            <if test="certificates != null">
+                certificates,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="other != null">
+                other,
+            </if>
+            <if test="participate != null">
+                participate,
+            </if>
+            <if test="openid != null">
+                openid,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+            <if test="usernumber != null">
+                usernumber,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="tel != null">
+                #{tel,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                #{sex,jdbcType=VARCHAR},
+            </if>
+            <if test="certificates != null">
+                #{certificates,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="other != null">
+                #{other,jdbcType=VARCHAR},
+            </if>
+            <if test="participate != null">
+                #{participate,jdbcType=VARCHAR},
+            </if>
+            <if test="openid != null">
+                #{openid,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=INTEGER},
+            </if>
+            <if test="usernumber != null">
+                #{usernumber,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+  <select id="listUser" parameterType="java.util.Map" resultType="java.util.Map">
+    SELECT u.username,u.tel,u.certificates,u.other usercorpid,u.participate,u.state,b.* from userinfo u,bidder b where u.id=b.userid
+    <if test="tel !=null">
+      and u.tel like '%${tel}%'
+    </if>
+    <if test=" auctionnumber !=null">
+      and b.auctionnumber like '%${auctionnumber}%'
+  </if>
+      <if test=" username !=null">
+          and u.username like '%${username}%'
+      </if>
+    order by b.applicationtime desc
+  </select>
+
+
+  <select id="bondList" resultType="java.util.Map">
+   SELECT bc.*,u.username,u.id userid ,u.tel,u.state from `userinfo` u,biddercompany bc where u.id=bc.userid
+   <if test="companytel !=null">
+     and bc.companytel like  '%${companytel}%'
+   </if>
+    <if test="userid !=null">
+      and bc.userid=#{userid}
+    </if>
+    <if test="other !=null">
+      and bc.other=#{other}
+    </if>
+    order by bc.updateday desc
+    limit #{page},#{limit}
+  </select>
+  <select id="bondListCount" resultType="java.lang.Integer">
+   select count(1) from( SELECT bc.id,u.username,u.id userid ,u.tel,u.state from `userinfo` u,biddercompany bc where
+      u.id=bc.userid
+   <if test="companytel !=null">
+      and bc.companytel like '%${companytel}%'
+   </if>
+    <if
+      test="userid !=null">
+      and bc.userid=#{userid}
+    </if>
+    <if test="other !=null">
+      and bc.other=#{other}
+    </if>
+    ) total
+  </select>
+  <select id="selectbidderList" resultType="java.util.Map">
+      SELECT bt.*,b.company,b.state biddercompanystate from
+      (SELECT u.username,u.tel,u.certificates,u.other usercorpid,u.participate,u.state,u.usernumber,b.* from `userinfo` u,bidder b where u.id=b.userid
+
+      <if test="auctionnumber !=null">
+          and b.auctionnumber=#{auctionnumber}
+      </if>
+      <if test="userid2 !=null">
+          and b.userid=#{userid2}
+      </if>
+      <if test="auctionstate !=null">
+          and b.Auctionstate=#{auctionstate}
+      </if>
+      <if test="paymentstate !=null">
+          and b.paymentstate=#{paymentstate}
+      </if>
+      <if test="isviolations !=null">
+          and b.isviolations=#{isviolations}
+      </if>
+      <if test="other !=null">
+          and u.other=#{other}
+      </if>
+
+      ) bt  LEFT JOIN biddercompany b on bt.userid=b.userid
+
+<if test="totalpay !=null">
+    order by bt.other desc
+</if>
+
+
+
+  </select>
+  <select id="selectbidderList2" resultType="java.util.Map">
+      SELECT bt.*,b.company,b.state biddercompanystate from
+      (SELECT u.username,u.tel,u.certificates,u.other usercorpid,u.participate,u.state,b.* from `userinfo` u,bidder b where u.id=b.userid
+
+      <if test="auctionnumber !=null">
+          and b.auctionnumber=#{auctionnumber}
+      </if>
+      <if test="userid2 !=null">
+          and b.userid=#{userid2}
+      </if>
+      <if test="auctionstate !=null">
+          and b.Auctionstate=#{auctionstate}
+      </if>
+      <if test="paymentstate !=null">
+          and b.paymentstate=#{paymentstate}
+      </if>
+      <if test="isviolations !=null">
+          and b.isviolations=#{isviolations}
+      </if>
+
+      ) bt  LEFT JOIN biddercompany b on bt.userid=b.userid
+
+
+      order by bt.other desc limit #{pageIndex},#{endPageIndex}
+
+
+  </select>
+  <select id="selectNoacution" resultType="java.util.Map">
+
+    SELECT u.*,b.id bidderid,b.auctionnumber  from bidder b,`userinfo` u where b.userid=u.id
+    <if test="auctionnumber">
+      and b.auctionnumber=#{auctionnumber}
+    </if>
+  </select>
+
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultType="com.example.auction.Model.Userinfo">
+    select
+     id, username, tel, sex, certificates, address, other, participate,state,usernumber
+    from userinfo
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectuser" resultType="com.example.auction.Model.Userinfo">
+
+  SELECT  * from userinfo  where id not in
+   (SELECT  u.id from auctioninfo a , `userinfo` u , bidder b  where u.id=b.userid and a.auctionnumber=b.auctionnumber
+    <if test="auctionnumber !=null">
+      and b.auctionnumber=#{auctionnumber}
+    </if>
+   )
+  </select>
+
+  <select id="selectUser2" resultType="com.example.auction.Model.Userinfo">
+
+    SELECT  u.* from auctioninfo a , `userinfo` u , bidder b  where u.id=b.userid and a.auctionnumber=b.auctionnumber
+    <if test="auctionnumber !=null">
+      and b.auctionnumber=#{auctionnumber}
+    </if>
+
+  </select>
+    <select id="selectUserid" resultType="com.example.auction.Model.Userinfo">
+        select * from userinfo where 1=1
+        <if test="userids!=null">
+            and other=#{userids}
+        </if>
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.example.auction.Model.Userinfo">
+    update userinfo
+    <set>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null">
+        tel = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="certificates != null">
+        certificates = #{certificates,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null">
+        other = #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="participate != null">
+        participate = #{participate,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <update id="updateTelAndOtherById" >
+        update userinfo
+        <set>
+            <if test="tel != null">
+                tel = #{tel,jdbcType=VARCHAR},
+            </if>
+            <if test="tel != null">
+                other = #{tel,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateStateById" >
+        update userinfo
+        <set>
+            <if test="state != null">
+                tel = #{state,jdbcType=INTEGER}
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateOpenIdById" >
+        update userinfo
+        <set>
+            <if test="openid != null">
+                openid = #{openid,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateOpenIdAndStateById" >
+        update userinfo
+        <set>
+            <if test="openid != null">
+                openid = #{openid,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                state = #{state,jdbcType=INTEGER}
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateOtherAndStateById" >
+        update userinfo
+        <set>
+            <if test="username != null and username!='' and username !='null' " >
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="other != null">
+                other = #{other,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                state = #{state,jdbcType=INTEGER}
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <delete id="delById">
+        delete from userinfo u where u.id=#{id}
+    </delete>
+
+    <select id="listuser2" resultType="java.util.Map">
+        select  * from userinfo where 1=1
+        <if test="tel !=null">
+           and tel=#{tel}
+        </if>
+        <if test="username !=null">
+            and username=#{username}
+        </if>
+    </select>
+    <select id="selectauctionuser" resultType="com.example.auction.Model.Userinfo">
+        SELECT u.* from `userinfo` u,bidder b where u.id=b.userid
+        <if test="auctionnumber !=null">
+            and b.auctionnumber=#{auctionnumber}
+        </if>
+        <if test="auctionstate !=null">
+            and b.Auctionstate=#{auctionstate}
+        </if>
+
+    </select>
+
+    <select id="selectauctionuser2" resultType="java.util.Map">
+        SELECT u.* ,b.id bidderid ,b.Auctionstate from `userinfo` u,bidder b where u.id=b.userid
+        <if test="auctionnumber !=null">
+            and b.auctionnumber=#{auctionnumber}
+        </if>
+        <if test="auctionstate !=null">
+            and b.Auctionstate=#{auctionstate}
+        </if>
+
+    </select>
+
+    <select id="selectauctionuser3" resultType="java.util.Map">
+        SELECT u.* ,b.id bidderid ,b.Auctionstate,b.isviolations from `userinfo` u,bidder b where u.id=b.userid
+        and b.id not in (SELECT id from bidder  where isviolations=#{isviolations})
+        <if test="auctionnumber !=null">
+            and b.auctionnumber=#{auctionnumber}
+        </if>
+        <if test="auctionstate !=null">
+            and (b.Auctionstate=#{auctionstate} or b.Auctionstate='3')
+        </if>
+
+    </select>
+
+    <select id="selectAllUser" resultType="java.util.Map">
+      SELECT u.*,b.id companyid, b.company,b.companytel,b.companyaddress , b.companycertificates, b.state,b.payvoucher,
+        b.updateday,b.identityimg,b.creditcode, b.idcarno, b.other isdel from `userinfo` u LEFT JOIN biddercompany b on u.id=b.userid
+      where 1=1
+      and (u.state=0 or u.state=2)
+      <if test="username !=null">
+          and u.username like '%${username}%'
+      </if>
+
+        <if test="company !=null">
+            and b.company like '%${company}%'
+        </if>
+        <if test="idcarno !=null">
+            and b.idcarno like '%${idcarno}%'
+        </if>
+        <if test="state !=null">
+            and b.state=#{state}
+        </if>
+        <if test="other !=null">
+            and b.other=#{other}
+        </if>
+        <if test="participate !=null">
+            and u.participate=#{participate}
+        </if>
+
+        order by b.updateday desc
+    </select>
+    <select id="selectAllUserInfo" resultType="java.util.Map">
+        SELECT u.id uid,u.username,u.tel,u.sex,u.address,u.certificates,u.other,u.participate,u.openid,u.state ustate,u.usernumber usernumber,
+        b.id companyid, b.company,b.companytel,b.companyaddress , b.companycertificates, b.state,b.payvoucher,
+        b.updateday,b.identityimg,b.creditcode, b.idcarno, b.other isdel from `userinfo` u LEFT JOIN biddercompany b on u.id=b.userid
+        where 1=1
+        <if test="username !=null and username !='' ">
+            and u.username like "%"#{username}"%"
+        </if>
+        <if test="usernumber !=null and usernumber !=''">
+            and u.usernumber like "%"#{usernumber}"%"
+        </if>
+        <if test="company !=null and company !=''">
+            and b.company like "%"#{company}"%"
+        </if>
+        <if test="idcarno !=null and idcarno !=''">
+            and b.idcarno like "%"#{idcarno}"%"
+        </if>
+        <if test="state !=null and state !=''">
+            and b.state=#{state}
+        </if>
+        <if test="other !=null and other !=''">
+            and b.other=#{other}
+        </if>
+        <if test="participate !=null and participate !=''">
+            and u.participate=#{participate}
+        </if>
+        order by b.updateday desc
+        limit #{page},#{limit}
+    </select>
+    <select id="selectuser2" resultType="com.example.auction.Model.Userinfo">
+        SELECT  u.* from  `userinfo` u , bidder b  where u.id=b.userid
+        <if test="auctionnumber !=null">
+            and b.auctionnumber=#{auctionnumber}
+        </if>
+        <if test="auctionstate !=null">
+            and b.Auctionstate=#{auctionstate}
+        </if>
+        <if test=" userqyid !=null">
+            and u.other=#{userqyid}
+        </if>
+    </select>
+
+    <select id="getByOpenId" resultType="com.example.auction.Model.Userinfo">
+        SELECT  * from  userinfo u
+        <where>
+            <if test="openid !=null">
+                and u.openid=#{openid}
+            </if>
+        </where>
+    </select>
+    <select id="getByTel" resultType="com.example.auction.Model.Userinfo">
+       SELECT MAX(id)id ,u.username,u.tel,u.sex,u.certificates,u.address,u.other,u.participate,u.state,u.openid FROM  userinfo u
+                where  u.tel=#{tel}
+    </select>
+
+    <select id="getByStates" resultType="string">
+        SELECT  u.openid from  userinfo u
+        <where>
+            u.state in
+            <foreach collection="list" index="index" separator="," item="item" open="(" close=")">
+                #{item}
+            </foreach>
+        </where>
+    </select>
+
+    <select id="getOpenIdByOthers" resultType="string">
+        SELECT  u.openid from  userinfo u
+        <where>
+            u.other in
+            <foreach collection="list" index="index" separator="," item="item" open="(" close=")">
+                #{item}
+            </foreach>
+        </where>
+    </select>
+
+    <select id="countUserInfo" resultType="long">
+        select count(*) from
+        (SELECT u.id /*uid,u.username,u.tel,u.sex,u.address,u.certificates,u.other,u.participate,u.delete_time,u.openid,u.state ustate,
+        b.id companyid, b.company,b.companytel,b.companyaddress , b.companycertificates, b.state,b.payvoucher,
+        b.updateday,b.identityimg,b.creditcode, b.idcarno, b.other isdel*/ from `userinfo` u LEFT JOIN biddercompany b on u.id=b.userid
+        where 1=1
+        <if test="username !=null">
+            and u.username like '%${username}%'
+        </if>
+
+        <if test="company !=null">
+            and b.company like '%${company}%'
+        </if>
+        <if test="idcarno !=null">
+            and b.idcarno like '%${idcarno}%'
+        </if>
+        <if test="state !=null">
+            and b.state=#{state}
+        </if>
+        <if test="other !=null">
+            and b.other=#{other}
+        </if>
+        <if test="participate !=null">
+            and u.participate=#{participate}
+        </if>
+        ) u
+    </select>
+    <select id="getMaxUserNumber" resultType="int">
+        select max(u.usernumber) from userinfo u
+    </select>
+    <select id="selectAllUsers" resultType="com.example.auction.Model.Userinfo">
+        select * from userinfo u where u.usernumber is null
+    </select>
+    <update id="updateAllUser" parameterType="com.example.auction.Model.Userinfo">
+        update userinfo
+        <set>
+            <if test="usernumber != null">
+                usernumber = #{usernumber,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.auction.Dao.PublicUserDao">
+    <resultMap id="PublicUserMap" type="com.example.auction.Model.PublicUser">
+        <id property="id" column="id"/>
+        <result property="unionid" column="unionid"/>
+        <result property="openid" column="openid"/>
+        <result property="username" column="username"/>
+        <result property="tel" column="tel"/>
+        <result property="sex" column="sex"/>
+    </resultMap>
+
+    <insert id="addPublicUser" parameterType="com.example.auction.Model.PublicUser" useGeneratedKeys="true" keyProperty="id">
+        insert into public_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            <if test="unionid != null">
+                unionid,
+            </if>
+            <if test="openid != null">
+                openid,
+            </if>
+            <if test="username != null">
+                username,
+            </if>
+            <if test="tel != null">
+                tel,
+            </if>
+            <if test="sex != null">
+                sex,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+
+            <if test="unionid != null">
+                #{unionid,jdbcType=VARCHAR},
+            </if>
+            <if test="openid != null">
+                #{openid,jdbcType=VARCHAR},
+            </if>
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="tel != null">
+                #{tel,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                #{sex,jdbcType=VARCHAR},
+            </if>
+
+        </trim>
+    </insert>
+    <update id="updatePhone">
+        update public_user u
+        <set>
+            <if test="phone != null">
+                u.phone = #{phone,jdbcType=INTEGER},
+            </if>
+        </set>
+        <where>
+            u.openid = #{openid,jdbcType=INTEGER}
+        </where>
+    </update>
+
+
+    <select id="getByOpenId"  resultType="com.example.auction.Model.PublicUser">
+        SELECT u.id,u.openid,u.username,u.tel,u.sex from public_user u
+        <where>
+            <if test="openid !=null">
+                u.openid  = #{openid}
+            </if>
+        </where>
+    </select>
+  <select id="publicUserList" parameterType="com.example.auction.Model.PublicUser" resultMap="PublicUserMap">
+    SELECT u.id,u.openid,u.username,u.tel,u.sex from public_user u
+    <where>
+        <if test="tel !=null">
+            u.tel like "%"#{tel}"%"
+        </if>
+    </where>
+  </select>
+
+    <select id="getAllPublicUser"  resultType="string">
+        SELECT u.openid from  public_user u
+    </select>
+    <select id="getAllUserPublic"  resultType="string">
+        SELECT u.openid from user_public u
+    </select>
+    <select id="getOpenIdByOthers" parameterType="list" resultType="string">
+        SELECT u.openid from user_public u
+        <where>
+            u.other in
+            <foreach collection="list" index="index" separator="," item="item" open="(" close=")">
+                #{item}
+            </foreach>
+        </where>
+    </select>
+
+</mapper>

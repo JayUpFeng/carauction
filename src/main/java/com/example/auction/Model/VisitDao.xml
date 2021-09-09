@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.auction.Dao.VisitDao">
+    <resultMap id="visitMap" type="com.example.auction.Model.Visit" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="lastvisittime" property="lastvisittime" jdbcType="TIMESTAMP" />
+        <result column="vistcount" property="vistcount" jdbcType="INTEGER" />
+        <result column="auctionnumber" property="auctionnumber" jdbcType="VARCHAR" />
+        <result column="cardealers" property="cardealers" jdbcType="VARCHAR" />
+        <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+        <result column="auctionid" property="auctionid" jdbcType="INTEGER" />
+        <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+        <association property="car" column="car" javaType="com.example.auction.Model.car">
+            <id column="cid" property="id"/>
+            <result column="carname" property="carname"/>
+            <result column="carcolor" property="carcolor"/>
+            <result column="carplatenumber" property="carplatenumber"/>
+            <result column="carhostid" property="carhostid"/>
+            <result column="carframenumber" property="carframenumber"/>
+            <result column="motornumber" property="motornumber"/>
+            <result column="brandcarseries" property="brandcarseries"/>
+            <result column="keynumber" property="keynumber"/>
+            <result column="actualservicelife" property="actualservicelife"/>
+            <result column="onbrandtime" property="onbrandtime"/>
+            <result column="drivinglicense" property="drivinglicense"/>
+            <result column="assessmentprice" property="assessmentprice"/>
+            <result column="accidentvehicle" property="accidentvehicle"/>
+            <result column="floor" property="floor"/>
+            <result column="assessmentpricetwo" property="assessmentpricetwo"/>
+            <result column="carimg" property="carimg"/>
+            <result column="other" property="other"/>
+            <result column="carport" property="carport"/>
+            <result column="cararea" property="cararea"/>
+            <result column="caraddress" property="caraddress"/>
+            <result column="carbosomimg" property="carbosomimg"/>
+            <result column="carmotorimg" property="carmotorimg"/>
+            <result column="carnumber" property="carnumber"/>
+            <result column="dealtime" property="dealtime"/>
+            <result column="inspectionhttp" property="inspectionhttp"/>
+            <result column="vehiclesys" property="vehiclesys"/>
+            <result column="jurisdiction" property="jurisdiction"/>
+            <result column="carthumbnail" property="carthumbnail"/>
+            <result column="batchnumber" property="batchnumber"/>
+        </association>
+    </resultMap>
+    <insert id="addVisit" parameterType="com.example.auction.Model.Visit" useGeneratedKeys="true" keyProperty="id">
+        insert into visit
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            <if test="userid != null">
+                userid,
+            </if>
+            <if test="auctionid != null">
+                auctionid,
+            </if>
+            <if test="carid != null">
+                carid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="auctionid != null">
+                #{auctionid,jdbcType=INTEGER},
+            </if>
+            <if test="carid != null">
+                #{carid,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <select id="list" resultType="com.example.auction.Model.Visit">
+        SELECT v.userid,u.username,u.tel,MAX(v.createtime) lastvisittime,COUNT(*) vistcount
+        FROM visit v, userinfo u
+        <where>
+            <if test="username !=null and username !=''">
+                u.username like  "%"#{username}"%" and
+            </if>
+            <if test="tel !=null">
+                u.tel like "%"#{tel}"%" and
+            </if>
+            v.userid=u.id and v.state=1
+        </where>
+        GROUP BY v.userid
+        ORDER BY lastvisittime desc
+    </select>
+    <select id="getByUserId" resultMap="visitMap">
+        SELECT a.id auctionid,COUNT(*) vistcount,MAX(v.createtime) lastvisittime,a.auctionnumber,a.cardealers,
+        c.id cid,c.carname,c.carcolor,c.carplatenumber,c.carhostid,c.carframenumber,c.motornumber,
+        c.brandcarseries,c.keynumber,c.actualservicelife,c.onbrandtime,c.drivinglicense,c.assessmentprice,
+        c.accidentvehicle,c.floor,c.assessmentpricetwo,c.carimg,c.other,c.carport,c.cararea,c.caraddress,
+        c.carbosomimg,c.carmotorimg,c.carnumber,c.dealtime,c.inspectionhttp,c.vehiclesys,c.jurisdiction,
+        c.carthumbnail,c.carstate,c.batchnumber
+        FROM visit v, auctioninfo a, car c
+        <where>
+            <if test="userid !=null">
+                v.userid=#{userid,jdbcType=INTEGER} AND
+            </if>
+            v.auctionid=a.id AND v.carid=c.id and v.state=1
+        </where>
+        GROUP BY c.id
+        ORDER BY lastvisittime desc
+    </select>
+    <select id="getByUserIdAuctionIdCarId" resultMap="visitMap">
+        SELECT v.createtime,a.auctionnumber,a.cardealers,
+        c.id cid,c.carname,c.carcolor,c.carplatenumber,c.carhostid,c.carframenumber,c.motornumber,
+        c.brandcarseries,c.keynumber,c.actualservicelife,c.onbrandtime,c.drivinglicense,c.assessmentprice,
+        c.accidentvehicle,c.floor,c.assessmentpricetwo,c.carimg,c.other,c.carport,c.cararea,c.caraddress,
+        c.carbosomimg,c.carmotorimg,c.carnumber,c.dealtime,c.inspectionhttp,c.vehiclesys,c.jurisdiction,
+        c.carthumbnail,c.carstate,c.batchnumber
+        FROM visit v, auctioninfo a, car c
+        <where>
+
+            <if test="userid !=null">
+                v.userid=#{userid,jdbcType=INTEGER} AND
+            </if>
+
+            <if test="auctionid !=null">
+                a.id=#{auctionid,jdbcType=INTEGER} AND
+            </if>
+
+            <if test="carid !=null">
+                c.id=#{carid,jdbcType=INTEGER} AND
+            </if>
+            v.auctionid=a.id AND v.carid=c.id and v.state=1
+        </where>
+        ORDER BY v.createtime desc
+    </select>
+    <update id="updateState" >
+        update visit
+        <set>
+            <if test="state != null">
+                state = #{state,jdbcType=INTEGER}
+            </if>
+        </set>
+        where userid = #{userid,jdbcType=INTEGER}
+    </update>
+</mapper>

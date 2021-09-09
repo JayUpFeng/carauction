@@ -1,5 +1,7 @@
 package com.example.auction.Model;
 
+import java.util.List;
+
 public class auctioninfo {
     private Integer id;
 
@@ -16,10 +18,25 @@ public class auctioninfo {
     private String other;
 
     private String auctionnumber;
-
+    //4：流拍
     private String state;
+    private String auctionendtime;
+    private String cardealers;
+    private String issesscar;
+    private String auctionjurisdiction;
+    private String transactionamount;
+    private List<car> carList;
+    private List<bidder> bidderList;
+    //车辆图片地址
+    private String carimg;
+    private Integer bidderid;
+    private String usernumber;
+    private String imgBase64;
 
-    public auctioninfo(Integer id, String auctiontime, String cycle, String carid, String floor, String assessmentprice, String other, String auctionnumber, String state) {
+    public auctioninfo(Integer id, String auctiontime, String cycle, String carid, String floor, String assessmentprice,
+                       String other, String auctionnumber, String state, String auctionendtime, String cardealers,
+                       String issesscar, String auctionjurisdiction, String transactionamount,
+                       String carimg) {
         this.id = id;
         this.auctiontime = auctiontime;
         this.cycle = cycle;
@@ -29,6 +46,36 @@ public class auctioninfo {
         this.other = other;
         this.auctionnumber = auctionnumber;
         this.state = state;
+        this.auctionendtime = auctionendtime;
+        this.cardealers = cardealers;
+        this.issesscar = issesscar;
+        this.auctionjurisdiction = auctionjurisdiction;
+        this.transactionamount = transactionamount;
+        this.carimg = carimg;
+    }
+
+    public String getTransactionamount() {
+        return transactionamount;
+    }
+
+    public void setTransactionamount(String transactionamount) {
+        this.transactionamount = transactionamount;
+    }
+
+    public String getAuctionjurisdiction() {
+        return auctionjurisdiction;
+    }
+
+    public void setAuctionjurisdiction(String auctionjurisdiction) {
+        this.auctionjurisdiction = auctionjurisdiction;
+    }
+
+    public String getCardealers() {
+        return cardealers;
+    }
+
+    public void setCardealers(String cardealers) {
+        this.cardealers = cardealers;
     }
 
     public auctioninfo() {
@@ -105,5 +152,89 @@ public class auctioninfo {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getAuctionendtime() {
+        return auctionendtime;
+    }
+
+    public void setAuctionendtime(String auctionendtime) {
+        this.auctionendtime = auctionendtime;
+    }
+
+    public String getIssesscar() {
+        return issesscar;
+    }
+
+    public void setIssesscar(String issesscar) {
+        this.issesscar = issesscar;
+    }
+
+    public List<car> getCarList() {
+        return carList;
+    }
+
+    public void setCarList(List<car> carList) {
+        this.carList = carList;
+    }
+
+    public List<bidder> getBidderList() {
+        return bidderList;
+    }
+
+    public void setBidderList(List<bidder> bidderList) {
+        this.bidderList = bidderList;
+    }
+
+    public String getCarimg() {
+        return carimg;
+    }
+
+    public void setCarimg(String carimg) {
+        this.carimg = carimg;
+    }
+
+    public Integer getBidderid() {
+        return bidderid;
+    }
+
+    public void setBidderid(Integer bidderid) {
+        this.bidderid = bidderid;
+    }
+
+    public String getUsernumber() {
+        return usernumber;
+    }
+
+    public void setUsernumber(String usernumber) {
+        this.usernumber = usernumber;
+    }
+
+    public String getImgBase64() {
+        return imgBase64;
+    }
+
+    public void setImgBase64(String imgBase64) {
+        this.imgBase64 = imgBase64;
+    }
+
+    @Override
+    public String toString() {
+        return "auctioninfo{" +
+                "id=" + id +
+                ", auctiontime='" + auctiontime + '\'' +
+                ", cycle='" + cycle + '\'' +
+                ", carid='" + carid + '\'' +
+                ", floor='" + floor + '\'' +
+                ", assessmentprice='" + assessmentprice + '\'' +
+                ", other='" + other + '\'' +
+                ", auctionnumber='" + auctionnumber + '\'' +
+                ", state='" + state + '\'' +
+                ", auctionendtime='" + auctionendtime + '\'' +
+                ", cardealers='" + cardealers + '\'' +
+                ", issesscar='" + issesscar + '\'' +
+                ", auctionjurisdiction='" + auctionjurisdiction + '\'' +
+                ", transactionamount='" + transactionamount + '\'' +
+                '}';
     }
 }

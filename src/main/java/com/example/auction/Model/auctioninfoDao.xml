@@ -12,13 +12,20 @@
       <arg column="other" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="auctionnumber" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="state" javaType="java.lang.String" jdbcType="VARCHAR" />
+        <arg column="auctionendtime" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="cardealers" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="issesscar" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="auctionjurisdiction" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="transactionamount" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="carimg" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List">
-    id, auctiontime, cycle, carid, floor, assessmentprice, other, auctionnumber,state
+    id, auctiontime, cycle, carid, floor, assessmentprice, other,
+     auctionnumber,state,auctionendtime,cardealers,issesscar,auctionjurisdiction,transactionamount,carimg
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from auctioninfo
     where id = #{id,jdbcType=INTEGER}
@@ -28,14 +35,16 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.example.auction.Model.auctioninfo">
-    insert into auctioninfo (id, auctiontime, cycle, 
-      carid, floor, assessmentprice, 
-      other, auctionnumber,state)
-    values (#{id,jdbcType=INTEGER}, #{auctiontime,jdbcType=VARCHAR}, #{cycle,jdbcType=VARCHAR}, 
-      #{carid,jdbcType=VARCHAR}, #{floor,jdbcType=VARCHAR}, #{assessmentprice,jdbcType=VARCHAR}, 
-      #{other,jdbcType=VARCHAR}, #{auctionnumber,jdbcType=VARCHAR},#{state,jdbcType=VARCHAR})
+    insert into auctioninfo (id, auctiontime, cycle,
+      carid, floor, assessmentprice,
+      other, auctionnumber,state,auctionendtime,cardealers,issesscar,auctionjurisdiction,transactionamount,carimg)
+    values (#{id,jdbcType=INTEGER}, #{auctiontime,jdbcType=VARCHAR}, #{cycle,jdbcType=VARCHAR},
+      #{carid,jdbcType=VARCHAR}, #{floor,jdbcType=VARCHAR}, #{assessmentprice,jdbcType=VARCHAR},
+      #{other,jdbcType=VARCHAR}, #{auctionnumber,jdbcType=VARCHAR},#{state,jdbcType=VARCHAR},
+      #{auctionendtime,jdbcType=VARCHAR},#{cardealers,jdbcType=VARCHAR},#{issesscar,jdbcType=VARCHAR},
+      #{auctionjurisdiction,jdbcType=VARCHAR}, #{transactionamount,jdbcType=VARCHAR}, #{carimg,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.example.auction.Model.auctioninfo">
+  <insert id="insertSelective" parameterType="com.example.auction.Model.auctioninfo" useGeneratedKeys="true" keyProperty="id">
     insert into auctioninfo
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -64,6 +73,24 @@
       </if>
       <if test="state != null">
         state,
+      </if>
+        <if test="auctionendtime != null">
+            auctionendtime,
+        </if>
+      <if test="cardealers != null">
+        cardealers,
+      </if>
+      <if test="issesscar != null">
+        issesscar,
+      </if>
+      <if test="auctionjurisdiction != null">
+        auctionjurisdiction,
+      </if>
+      <if test="transactionamount != null">
+        transactionamount,
+      </if>
+      <if test="carimg != null">
+        carimg,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -94,6 +121,24 @@
       <if test="state != null">
         #{state,jdbcType=VARCHAR},
       </if>
+        <if test="auctionendtime != null">
+            #{auctionendtime,jdbcType=VARCHAR},
+        </if>
+      <if test="cardealers != null">
+        #{cardealers,jdbcType=VARCHAR},
+      </if>
+      <if test="issesscar != null">
+        #{issesscar,jdbcType=VARCHAR},
+      </if>
+      <if test="auctionjurisdiction != null">
+        #{auctionjurisdiction,jdbcType=VARCHAR},
+      </if>
+      <if test="transactionamount != null">
+        #{transactionamount,jdbcType=VARCHAR},
+      </if>
+      <if test="carimg != null">
+        #{carimg,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.example.auction.Model.auctioninfo">
@@ -123,6 +168,22 @@
       <if test="state != null">
         state = #{state,jdbcType=VARCHAR},
       </if>
+        <if test="auctionendtime != null">
+            auctionendtime = #{auctionendtime,jdbcType=VARCHAR},
+        </if>
+      <if test="cardealers != null">
+        cardealers = #{cardealers,jdbcType=VARCHAR},
+      </if>
+      <if test="issesscar != null">
+        issesscar = #{issesscar,jdbcType=VARCHAR},
+      </if>
+      <if test="auctionjurisdiction != null">
+        auctionjurisdiction = #{auctionjurisdiction,jdbcType=VARCHAR},
+      </if>
+      <if test="transactionamount != null">
+        transactionamount = #{transactionamount,jdbcType=VARCHAR},
+      </if>
+
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -134,8 +195,14 @@
       floor = #{floor,jdbcType=VARCHAR},
       assessmentprice = #{assessmentprice,jdbcType=VARCHAR},
       other = #{other,jdbcType=VARCHAR},
-      auctionnumber = #{auctionnumber,jdbcType=VARCHAR}
-        state = #{state,jdbcType=VARCHAR}
+      auctionnumber = #{auctionnumber,jdbcType=VARCHAR},
+        state = #{state,jdbcType=VARCHAR},
+        auctionendtime = #{auctionendtime,jdbcType=VARCHAR},
+        cardealers = #{cardealers,jdbcType=VARCHAR},
+        issesscar = #{issesscar,jdbcType=VARCHAR},
+        auctionjurisdiction = #{auctionjurisdiction,jdbcType=VARCHAR},
+        transactionamount = #{transactionamount,jdbcType=VARCHAR},
+
     where id = #{id,jdbcType=INTEGER}
   </update>
 
@@ -143,186 +210,375 @@
 
 
 
-  <resultMap id="BaseResultMap1" type="com.example.auction.Model.acutionListInfo">
 
-    <result column="aucid" javaType="java.lang.Integer" jdbcType="INTEGER" />
-    <result column="auctiontime" javaType="java.lang.String" jdbcType="VARCHAR" />
-    <result column="cycle" javaType="java.lang.String" jdbcType="VARCHAR" />
-    <result column="auctionfloor" javaType="java.lang.String" jdbcType="VARCHAR" />
-    <result column="auctionassessmentprice" javaType="java.lang.String" jdbcType="VARCHAR" />
-    <result column="addtime" javaType="java.lang.String" jdbcType="VARCHAR" />
-    <result column="auctionnumber" javaType="java.lang.String" jdbcType="VARCHAR" />
-    <collection property="carList" resultMap="BaseResultMapcar"></collection>
-    <collection property="bidderUserlist"  resultMap="BaseResultMapbidder"></collection>
-  </resultMap>
-
-  <resultMap id="BaseResultMapbidder" type="com.example.auction.Model.BidderUser">
-    <result column="paymentvoucher" javaType="java.lang.String" jdbcType="VARCHAR" />
-    <result column="paymentstate" javaType="java.lang.String" jdbcType="VARCHAR" />
-    <result column="applicationtime" javaType="java.lang.String" jdbcType="VARCHAR" />
-    <result column="banumber" javaType="java.lang.String" jdbcType="VARCHAR" />
-    <result column="totalamount" javaType="java.lang.String" jdbcType="VARCHAR" />
-    <result column="Auctionstate" javaType="java.lang.String" jdbcType="VARCHAR" />
-    <result column="ispaybond" javaType="java.lang.String" jdbcType="VARCHAR" />
-    <result column="username" javaType="java.lang.String" jdbcType="VARCHAR" />
-    <result column="tel" javaType="java.lang.String" jdbcType="VARCHAR" />
-    <result column="certificates" javaType="java.lang.String" jdbcType="VARCHAR" />
-    <result column="address" javaType="java.lang.String" jdbcType="VARCHAR" />
-  </resultMap>
-
-  <resultMap id="BaseResultMapcar" type="com.example.auction.Model.car">
-
-      <result column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <result column="carname" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <result column="carcolor" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <result column="carplatenumber" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <result column="carhostid" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <result column="carframenumber" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <result column="motornumber" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <result column="brandcarseries" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <result column="keynumber" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <result column="actualservicelife" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <result column="onbrandtime" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <result column="drivinglicense" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <result column="assessmentprice" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <result column="accidentvehicle" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <result column="floor" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <result column="assessmentpricetwo" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <result column="carimg" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <result column="other" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <result column="carport" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <result column="cararea" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <result column="caraddress" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <result column="carbosomimg" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <result column="carmotorimg" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <result column="carnumber" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <result column="dealtime" javaType="java.lang.String" jdbcType="VARCHAR" />
-
-  </resultMap>
-
-  <select id="listauctioninfo" resultMap="BaseResultMap1" >
-
-    SELECT
-    ac.aucid,
-    ac.auctiontime,
-    ac.cycle,
-    ac.auctionfloor,
-    ac.auctionassessmentprice,
-    ac.auctionnumber,
-    ac.addtime,
-    ac.id,
-    ac.carname,
-    ac.carcolor,
-    ac.carplatenumber,
-    ac.carhostid,
-    ac.carframenumber,
-    ac.motornumber,
-    ac.brandcarseries,
-    ac.keynumber,
-    ac.actualservicelife,
-    ac.onbrandtime,
-    ac.drivinglicense,
-    ac.assessmentprice,
-    ac.accidentvehicle,
-    ac.floor,
-    ac.assessmentpricetwo,
-    ac.carimg,
-    ac.other,
-    ac.carport,
-    ac.cararea,
-    ac.caraddress,
-    ac.carbosomimg,
-    ac.carmotorimg,
-    ac.carnumber,
-    ac.dealtime,
-    bu.paymentvoucher,
-    bu.paymentstate,
-    bu.applicationtime,
-    bu.banumber,
-    bu.totalamount,
-    bu.Auctionstate,
-    bu.ispaybond,
-    bu.username,
-    bu.tel,
-    bu.certificates,
-    bu.address
-    FROM
-    (
-    SELECT au.id aucid,
-    au.auctiontime,
-    au.cycle,
-    au.floor auctionfloor,
-    au.assessmentprice auctionassessmentprice,
-    au.auctionnumber,
-    au.other addtime,
-    c.id,
-    c.carname,
-    c.carcolor,
-    c.carplatenumber,
-    c.carhostid,
-    c.carframenumber,
-    c.motornumber,
-    c.brandcarseries,
-    c.keynumber,
-    c.actualservicelife,
-    c.onbrandtime,
-    c.drivinglicense,
-    c.assessmentprice,
-    c.accidentvehicle,
-    c.floor,
-    c.assessmentpricetwo,
-    c.carimg,
-    c.other,
-    c.carport,
-    c.cararea,
-    c.caraddress,
-    c.carbosomimg,
-    c.carmotorimg,
-    c.carnumber,
-    c.dealtime
-    FROM
-    auctioninfo au,
-    car c
-    WHERE
-    au.carid = c.id
-    ) ac
-    LEFT JOIN (
-    SELECT
-    b.paymentvoucher,
-    b.paymentstate,
-    b.applicationtime,
-    b.auctionnumber banumber,
-    b.other totalamount,
-    b.Auctionstate,
-    b.ispaybond,
-    u.username,
-    u.tel,
-    u.certificates,
-    u.address
-    FROM
-    bidder b,
-    `user` u
-    WHERE
-    b.userid = u.id
-    ) bu ON bu.banumber = ac.auctionnumber
-    where 1=1
-    <if test="auctionstate !=null">
-      and bu.Auctionstate=#{auctionstate}
-    </if>
-    order by ac.addtime desc
-
-  </select>
 
 
 
   <select id="listacutionList" resultType="com.example.auction.Model.auctioninfo">
-    select
-    <include refid="Base_Column_List" />
-    from auctioninfo where 1=1
+    SELECT a.* from auctioninfo a LEFT JOIN bidder b on a.auctionnumber=b.auctionnumber
+    <if test="state !=null">
+      and a.state=#{state}
+    </if>
+
+    where 1=1
+    <if test="userid !=null">
+    and b.userid=#{userid}
+  </if>
+    <if test="bidderstate !=null">
+      and b.Auctionstate=#{bidderstate}
+    </if>
+    <if test="auctionnumber !=null">
+      and b.auctionnumber=#{auctionnumber}
+    </if>
+  </select>
+    <select id="selectByauctionnumber" resultType="com.example.auction.Model.auctioninfo">
+
+      select  * from auctioninfo where auctionnumber=#{auctionnumber}
+    </select>
+  <select id="selectNobidder" resultType="java.util.Map">
+    SELECT * from (SELECT b.*,u.username,u.other openid from bidder b,`userinfo` u where b.userid=u.id
+    <if test="auctionnumber !=null">
+      and b.auctionnumber=#{auctionnumber}
+    </if>
+
+          and b.Auctionstate='2'
+
+    ) bt
+    where userid  not in (SELECT id from `userinfo` where 1=1
+   <if test="userid !=null">
+    and id =#{userid}
+   </if>
+    )
+  </select>
+
+  <select id="selectListk" resultType="com.example.auction.Model.auctioninfo">
+    select * from auctioninfo where 1=1
+    <if test="auctionnumber !=null">
+      and auctionnumber like '%${auctionnumber}%'
+    </if>
     <if test="state !=null">
       and state=#{state}
     </if>
+    <if test="cardealers !=null">
+
+      and cardealers like '%${cardealers}%'
+    </if>
+    <if test="auctionjurisdiction !=null">
+
+      and auctionjurisdiction=#{auctionjurisdiction}
+    </if>
+    <if test="cardealers !=null">
+
+      and cardealers=#{cardealers}
+    </if>
+    order by
+    <if test="auctiontime !=null">
+      auctiontime
+  </if>
+    <if test="auctionendtime !=null">
+      auctionendtime
+    </if>
+    <if test="other !=null">
+      other
+    </if>
+    <if test="id !=null">
+      id
+    </if>
+    desc
+  </select>
+
+  <select id="selectListk2" resultType="com.example.auction.Model.auctioninfo">
+    select * from auctioninfo where 1=1
+    <if test="auctionnumber !=null">
+      and auctionnumber like '%${auctionnumber}%'
+    </if>
+    <if test="state !=null">
+      and (state=#{state} or state='4')
+    </if>
+    <if test="cardealers !=null">
+
+      and cardealers like '%${cardealers}%'
+    </if>
+    <if test="auctionjurisdiction !=null">
+
+      and auctionjurisdiction=#{auctionjurisdiction}
+    </if>
+    <if test="cardealers !=null">
+
+      and cardealers=#{cardealers}
+    </if>
+    order by id desc
+  </select>
+  <select id="selectListk3" resultType="com.example.auction.Model.auctioninfo">
+    select * from auctioninfo where 1=1
+    <if test="auctionnumber !=null">
+      and auctionnumber like '%${auctionnumber}%'
+    </if>
+    <if test="state !=null">
+      and state=#{state}
+    </if>
+    <if test="cardealers !=null">
+
+      and cardealers like '%${cardealers}%'
+    </if>
+    <if test="auctionjurisdiction !=null">
+
+      and auctionjurisdiction=#{auctionjurisdiction}
+    </if>
+    <if test="cardealers !=null">
+
+      and cardealers=#{cardealers}
+    </if>
+    <if test="cardealers !=null">
+
+      and cardealers=#{cardealers}
+    </if>
+    order by
+    <if test="auctiontime !=null">
+      auctiontime
+    </if>
+    <if test="auctionendtime !=null">
+      auctionendtime
+    </if>
+    <if test="other !=null">
+      other
+    </if>
+    <if test="id !=null">
+      id
+    </if>
+    desc
+  </select>
+
+
+  <select id="selectList" resultType="com.example.auction.Model.auctioninfo">
+    select * from auctioninfo where 1=1
+    <if test="auctionnumber !=null">
+      and auctionnumber  like '%${auctionnumber}%'
+    </if>
+    <if test="state !=null">
+      and state=#{state}
+    </if>
+    <if test="cardealers !=null">
+
+      and cardealers like '%${cardealers}%'
+    </if>
+    <if test="auctionjurisdiction !=null">
+
+      and auctionjurisdiction=#{auctionjurisdiction}
+    </if>
+
+    order by id desc
+  </select>
+
+
+
+  <select id="selectauction" resultType="java.util.Map">
+    select  a.*,b.id bidderid, b.Auctionstate from   auctioninfo a
+    LEFT JOIN bidder b on a.auctionnumber=b.auctionnumber where a.id not in
+    ( SELECT a.id from auctioninfo a,bidder b where a.auctionnumber=b.auctionnumber
+
+      and (b.isviolations=#{isviolations} or b.paymentstate=#{paymentstate})
+
+    <if test="state !=null">
+      and a.state=#{state}
+    </if>
+
+    )
+  </select>
+
+
+  <select id="selectListk4" resultType="com.example.auction.Model.auctioninfo">
+    select * from auctioninfo where 1=1
+    <if test="auctionnumber !=null">
+      and auctionnumber like '%${auctionnumber}%'
+    </if>
+    <if test="state !=null">
+      and state=#{state}
+    </if>
+    <if test="cardealers !=null">
+
+      and cardealers like '%${cardealers}%'
+    </if>
+    <if test="auctionjurisdiction !=null">
+
+      and auctionjurisdiction=#{auctionjurisdiction}
+    </if>
+    <if test="cardealers !=null">
+
+      and cardealers=#{cardealers}
+    </if>
+    order by
+    <if test="auctiontime !=null">
+      auctiontime
+    </if>
+    <if test="auctionendtime !=null">
+      auctionendtime
+    </if>
+    <if test="other !=null">
+      other
+    </if>
+    <if test="id !=null">
+      id
+    </if>
+    desc
+  </select>
+  <select id="selectListPageCount" resultType="java.lang.Integer">
+    select count(1) from (
+    select id from auctioninfo where 1=1
+    <if test="auctionnumber !=null">
+      and auctionnumber like '%${auctionnumber}%'
+    </if>
+    <if test="state !=null">
+      and state=#{state}
+    </if>
+    <if test="cardealers !=null">
+
+      and cardealers like '%${cardealers}%'
+    </if>
+    <if test="auctionjurisdiction !=null">
+
+      and auctionjurisdiction=#{auctionjurisdiction}
+    </if>
+    <if test="cardealers !=null">
+
+      and cardealers=#{cardealers}
+    </if>
+
+    ) result
+  </select>
+
+
+
+  <select id="selectAllAuc" resultType="com.example.auction.Model.auctioninfo">
+    select
+    <include refid="Base_Column_List" />
+    from auctioninfo
 
   </select>
 
+
+  <select id="selectListk5" resultType="java.util.Map">
+--   之前逻辑  select a.* , ac.userstr  from auctioninfo a ,aucuserid ac where a.id=ac.aucid
+    select a.* , ac.userstr,ac.issend  from auctioninfo a ,aucuserid ac where a.id=ac.aucid
+    <if test="auctionnumber !=null">
+      and a.auctionnumber like '%${auctionnumber}%'
+    </if>
+    <if test="state !=null">
+      and a.state=#{state}
+    </if>
+    <if test="cardealers !=null">
+
+      and a.cardealers like '%${cardealers}%'
+    </if>
+    <if test="auctionjurisdiction !=null">
+
+      and a.auctionjurisdiction=#{auctionjurisdiction}
+    </if>
+    <if test="cardealers !=null">
+
+      and a.cardealers=#{cardealers}
+    </if>
+    order by
+    <if test="auctiontime !=null">
+     a.auctiontime
+    </if>
+    <if test="auctionendtime !=null">
+     a.auctionendtime
+    </if>
+    <if test="other !=null">
+      a.other
+    </if>
+    <if test="id !=null">
+      a.id
+    </if>
+    desc
+  </select>
+
+  <select id="listByNumber"  parameterType="java.util.Set" resultType="com.example.auction.Model.auctioninfo">
+    select * from auctioninfo c
+    <where>
+      c.auctionnumber in
+      <foreach collection="set" index="index" separator="," item="item" open="(" close=")">
+        #{item}
+      </foreach>
+    </where>
+    order by c.id desc
+  </select>
+  <update id="updateCarImg" parameterType="com.example.auction.Model.auctioninfo">
+    update auctioninfo
+    <set>
+      <if test="carimg != null">
+        carimg = #{carimg,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectList6" resultType="com.example.auction.Model.auctioninfo">
+    select DISTINCT a.* from  (SELECT bt.*  from
+    (SELECT b.userid,b.auctionnumber from `userinfo` u,bidder b where u.id=b.userid
+    <if test="userid2 !=null and userid2 !=''">
+      and b.userid=#{userid2}
+    </if>
+    <if test="auctionstate !=null and auctionstate !='' ">
+      and b.Auctionstate=#{auctionstate}
+    </if>
+    <if test="paymentstate !=null and paymentstate !='' ">
+      and b.paymentstate=#{paymentstate}
+    </if>
+    ) bt  LEFT JOIN biddercompany b on bt.userid=b.userid)re
+    inner join
+    auctioninfo a
+    on re.auctionnumber=a.auctionnumber
+    and a.state=#{state}
+    order by a.auctionnumber desc
+    limit #{page},#{limit}
+  </select>
+  <select id="selectList6Count" resultType="int">
+    select COUNT(DISTINCT a.auctionnumber) from  (SELECT bt.*  from
+    (SELECT b.userid,b.auctionnumber from `userinfo` u,bidder b where u.id=b.userid
+    <if test="userid2 !=null and userid2 !=''">
+      and b.userid=#{userid2}
+    </if>
+    <if test="auctionstate !=null and auctionstate !='' ">
+      and b.Auctionstate=#{auctionstate}
+    </if>
+    <if test="paymentstate !=null and paymentstate !='' ">
+      and b.paymentstate=#{paymentstate}
+    </if>
+    ) bt  LEFT JOIN biddercompany b on bt.userid=b.userid)re
+    inner join
+    auctioninfo a
+    on re.auctionnumber=a.auctionnumber
+    and a.state=#{state}
+  </select>
+
+  <select id="selectList7" resultType="com.example.auction.Model.auctioninfo">
+    select a.* from auctioninfo a where a.id in
+    (select DISTINCT ac.auctioninfoid from auctioninfo_car ac where
+    ac.carid in (
+     select c.id from car c where c.carframenumber like "%"#{carframenumber}"%"
+    )
+    )
+    order by a.id desc
+    limit #{page},#{limit}
+  </select>
+  <select id="selectList7Count" resultType="int">
+    select count(1) from auctioninfo a where a.id in
+    (select DISTINCT ac.auctioninfoid from auctioninfo_car ac where
+    ac.carid in (
+     select c.id from car c where c.carframenumber like "%"#{carframenumber}"%"
+    )
+    )
+  </select>
+  <select id="lossAuctionCount" resultType="int">
+    select count(1) from auctioninfo a where a.state='4'
+  </select>
+  <select id="lossAuction" resultType="com.example.auction.Model.auctioninfo">
+    select * from auctioninfo a
+    <where>
+      a.state='4'
+    </where>
+    order by a.id desc
+    limit #{page},#{limit}
+  </select>
 </mapper>
