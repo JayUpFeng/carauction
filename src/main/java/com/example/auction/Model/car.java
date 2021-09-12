@@ -34,7 +34,7 @@ public class car {
     private String assessmentprice;
     @Excel(name = "是否事故车")
     private String accidentvehicle;
-    @Excel(name = "底价")
+//    @Excel(name = "底价")
     private String floor;
     private String assessmentpricetwo;
     @Excel(name = "车外图片上传")
