@@ -24,10 +24,11 @@ public class auctioninfo {
     private String cardealers;
     private String issesscar;
     private String auctionjurisdiction;
+    //成交金额、流拍最高出价者
     private String transactionamount;
     private List<car> carList;
     private List<bidder> bidderList;
-    //车辆图片地址
+    //成交、流拍车辆凭证
     private String carimg;
     private Integer bidderid;
     private String usernumber;

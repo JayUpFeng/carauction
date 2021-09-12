@@ -34,5 +34,5 @@ public interface bidderDao {
     //删除流拍的标书
     int deleteByAuctionNumber(String aucnumber);
     //查询最大流拍bidderId
-    int getMaxPrice(String auctionnumber);
+    List<bidder> getMaxPrice(String auctionnumber);
 }

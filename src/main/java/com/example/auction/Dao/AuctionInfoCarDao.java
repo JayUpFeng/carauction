@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface AuctionInfoCarDao {
     int save(AuctionInfoCar auctionInfoCar);
+    int update(AuctionInfoCar auctionInfoCar);
     int getByInfoIdAndCarId(AuctionInfoCar auctionInfoCar);
     int delete(AuctionInfoCar auctionInfoCar);
 }

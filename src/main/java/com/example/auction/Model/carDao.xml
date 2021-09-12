@@ -508,25 +508,14 @@
 
 
     </select>
-  <select id="getByIdAndCarFrameNumber" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from car
-    <where>
-      <if test="carframenumber !=null">
-        carframenumber like "%"#{carframenumber}"%"
-      </if>
-    </where>
-    order by id desc
-    limit #{page},#{limit}
-  </select>
+
   <select id="getByIdAndCarFrameNumberCount" resultType="int">
     select
     count(1)
     from car
     <where>
       <if test="carframenumber !=null">
-        carframenumber like "%"#{carframenumber}"%"
+        carframenumber = #{carframenumber}
       </if>
     </where>
   </select>

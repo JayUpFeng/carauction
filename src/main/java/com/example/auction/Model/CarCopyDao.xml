@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.auction.Dao.CarCopyDao">
+
+<insert id="save" parameterType="com.example.auction.Model.CarCopy">
+    insert into car_copy
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="id != null">
+            id,
+        </if>
+        <if test="carname != null">
+            carname,
+        </if>
+        <if test="carcolor != null">
+            carcolor,
+        </if>
+        <if test="carplatenumber != null">
+            carplatenumber,
+        </if>
+        <if test="carhostid != null">
+            carhostid,
+        </if>
+        <if test="carframenumber != null">
+            carframenumber,
+        </if>
+        <if test="motornumber != null">
+            motornumber,
+        </if>
+        <if test="brandcarseries != null">
+            brandcarseries,
+        </if>
+        <if test="keynumber != null">
+            keynumber,
+        </if>
+        <if test="actualservicelife != null">
+            actualservicelife,
+        </if>
+        <if test="onbrandtime != null">
+            onbrandtime,
+        </if>
+        <if test="drivinglicense != null">
+            drivinglicense,
+        </if>
+        <if test="assessmentprice != null">
+            assessmentprice,
+        </if>
+        <if test="accidentvehicle != null">
+            accidentvehicle,
+        </if>
+        <if test="floor != null">
+            floor,
+        </if>
+        <if test="assessmentpricetwo != null">
+            assessmentpricetwo,
+        </if>
+        <if test="carimg != null">
+            carimg,
+        </if>
+        <if test="other != null">
+            other,
+        </if>
+        <if test="carport != null">
+            carport,
+        </if>
+        <if test="cararea != null">
+            cararea,
+        </if>
+        <if test="caraddress != null">
+            caraddress,
+        </if>
+        <if test="carbosomimg != null">
+            carbosomimg,
+        </if>
+        <if test="carmotorimg != null">
+            carmotorimg,
+        </if>
+        <if test="carnumber != null">
+            carnumber,
+        </if>
+        <if test="dealtime != null">
+            dealtime,
+        </if>
+        <if test="inspectionhttp != null">
+            inspectionhttp,
+        </if>
+        <if test="vehiclesys != null">
+            vehiclesys,
+        </if>
+        <if test="jurisdiction != null">
+            jurisdiction,
+        </if>
+        <if test="carthumbnail != null">
+            carthumbnail,
+        </if>
+        <if test="carstate != null">
+            carstate,
+        </if>
+        <if test="batchnumber != null">
+            batchnumber,
+        </if>
+        <if test="reporturl != null">
+            reporturl,
+        </if>
+        <if test="insuranceexpire != null">
+            insuranceexpire,
+        </if>
+        <if test="yearexpire != null">
+            yearexpire
+        </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="id != null">
+            #{id,jdbcType=INTEGER},
+        </if>
+        <if test="carname != null">
+            #{carname,jdbcType=VARCHAR},
+        </if>
+        <if test="carcolor != null">
+            #{carcolor,jdbcType=VARCHAR},
+        </if>
+        <if test="carplatenumber != null">
+            #{carplatenumber,jdbcType=VARCHAR},
+        </if>
+        <if test="carhostid != null">
+            #{carhostid,jdbcType=VARCHAR},
+        </if>
+        <if test="carframenumber != null">
+            #{carframenumber,jdbcType=VARCHAR},
+        </if>
+        <if test="motornumber != null">
+            #{motornumber,jdbcType=VARCHAR},
+        </if>
+        <if test="brandcarseries != null">
+            #{brandcarseries,jdbcType=VARCHAR},
+        </if>
+        <if test="keynumber != null">
+            #{keynumber,jdbcType=VARCHAR},
+        </if>
+        <if test="actualservicelife != null">
+            #{actualservicelife,jdbcType=VARCHAR},
+        </if>
+        <if test="onbrandtime != null">
+            #{onbrandtime,jdbcType=VARCHAR},
+        </if>
+        <if test="drivinglicense != null">
+            #{drivinglicense,jdbcType=VARCHAR},
+        </if>
+        <if test="assessmentprice != null">
+            #{assessmentprice,jdbcType=VARCHAR},
+        </if>
+        <if test="accidentvehicle != null">
+            #{accidentvehicle,jdbcType=VARCHAR},
+        </if>
+        <if test="floor != null">
+            #{floor,jdbcType=VARCHAR},
+        </if>
+        <if test="assessmentpricetwo != null">
+            #{assessmentpricetwo,jdbcType=VARCHAR},
+        </if>
+        <if test="carimg != null">
+            #{carimg,jdbcType=VARCHAR},
+        </if>
+        <if test="other != null">
+            #{other,jdbcType=VARCHAR},
+        </if>
+        <if test="carport != null">
+            #{carport,jdbcType=VARCHAR},
+        </if>
+        <if test="cararea != null">
+            #{cararea,jdbcType=VARCHAR},
+        </if>
+        <if test="caraddress != null">
+            #{caraddress,jdbcType=VARCHAR},
+        </if>
+        <if test="carbosomimg != null">
+            #{carbosomimg,jdbcType=VARCHAR},
+        </if>
+        <if test="carmotorimg != null">
+            #{carmotorimg,jdbcType=VARCHAR},
+        </if>
+        <if test="carnumber != null">
+            #{carnumber,jdbcType=VARCHAR},
+        </if>
+        <if test="dealtime != null">
+            #{dealtime,jdbcType=VARCHAR},
+        </if>
+        <if test="inspectionhttp != null">
+            #{inspectionhttp,jdbcType=VARCHAR},
+        </if>
+        <if test="vehiclesys != null">
+            #{vehiclesys,jdbcType=VARCHAR},
+        </if>
+        <if test="jurisdiction != null">
+            #{jurisdiction,jdbcType=VARCHAR},
+        </if>
+        <if test="carthumbnail != null">
+            #{carthumbnail,jdbcType=VARCHAR},
+        </if>
+        <if test="carstate != null">
+            #{carstate,jdbcType=VARCHAR},
+        </if>
+        <if test="batchnumber != null">
+            #{batchnumber,jdbcType=VARCHAR},
+        </if>
+        <if test="reporturl != null">
+            #{reporturl,jdbcType=VARCHAR},
+        </if>
+        <if test="insuranceexpire != null">
+            #{insuranceexpire,jdbcType=VARCHAR},
+        </if>
+        <if test="yearexpire != null">
+            #{yearexpire,jdbcType=VARCHAR}
+        </if>
+    </trim>
+</insert>
+<select id="carCopyList" resultType="com.example.auction.Model.CarCopy">
+    select * from car_copy c
+    <where>
+        c.id in
+        (
+        select carid from auctioninfo_car ac
+        where ac.auctioninfoid=#{auctioninfoid}
+        and ac.type=1
+        )
+    </where>
+</select>
+    <select id="getById" resultType="int">
+        select count(1) from car_copy c
+        <where>
+            c.id = #{id}
+        </where>
+    </select>
+</mapper>

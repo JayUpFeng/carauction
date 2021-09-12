@@ -5,10 +5,11 @@ package com.example.auction.Model;
  * @时间：2021-09-08 17:33:10
  * @注释：流拍中间表
  */
-public class AuctionInfoBidderLoss {
+public class AuctionInfoUserLoss {
     private Integer id;
     private Integer auctioninfoid;
-    private Integer bidderid;
+    private Integer userid;
+    private Integer price;
 
     public Integer getId() {
         return id;
@@ -26,11 +27,19 @@ public class AuctionInfoBidderLoss {
         this.auctioninfoid = auctioninfoid;
     }
 
-    public Integer getBidderid() {
-        return bidderid;
+    public Integer getUserid() {
+        return userid;
     }
 
-    public void setBidderid(Integer bidderid) {
-        this.bidderid = bidderid;
+    public void setUserid(Integer userid) {
+        this.userid = userid;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
     }
 }

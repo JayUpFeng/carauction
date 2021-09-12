@@ -30,8 +30,6 @@ public class VisitController {
     @Autowired
     private carDao carDao;
     @Autowired
-    private AuctionInfoCarImgDao auctionInfoCarImgDao;
-    @Autowired
     private com.example.auction.Dao.bidderDao bidderDao;
     @Autowired
     private com.example.auction.Dao.auctioninfoDao auctioninfoDao;
@@ -208,8 +206,8 @@ public class VisitController {
         return m;
     }
 
-    @GetMapping("updateUser")
-    public String updateUser() {
+    @GetMapping("updateAuctionInfoCar")
+    public String updateAuctionInfoCar() {
         List<auctioninfo> auctioninfos = auctioninfoDao.selectAllAuc();
         if (auctioninfos.size()>0){
             for (auctioninfo auctioninfo:auctioninfos){
@@ -223,6 +221,7 @@ public class VisitController {
                         AuctionInfoCar infoCar=new AuctionInfoCar();
                         infoCar.setCarid(carIdInt);
                         infoCar.setAuctioninfoid(id);
+                        infoCar.setType(0);
                         int dao = auctionInfoCarDao.getByInfoIdAndCarId(infoCar);
                         if (dao==0){
                             auctionInfoCarDao.save(infoCar);

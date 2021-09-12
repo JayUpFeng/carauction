@@ -183,7 +183,9 @@
       <if test="transactionamount != null">
         transactionamount = #{transactionamount,jdbcType=VARCHAR},
       </if>
-
+      <if test="carimg != null">
+        carimg = #{carimg,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -556,8 +558,15 @@
     select a.* from auctioninfo a where a.id in
     (select DISTINCT ac.auctioninfoid from auctioninfo_car ac where
     ac.carid in (
-     select c.id from car c where c.carframenumber like "%"#{carframenumber}"%"
+     select c.id from car c
+     <where>
+       c.carframenumber in
+       <foreach collection="list" index="index" separator="," item="item" open="(" close=")">
+         #{item}
+       </foreach>
+     </where>
     )
+    and ac.type=#{type}
     )
     order by a.id desc
     limit #{page},#{limit}
@@ -566,10 +575,18 @@
     select count(1) from auctioninfo a where a.id in
     (select DISTINCT ac.auctioninfoid from auctioninfo_car ac where
     ac.carid in (
-     select c.id from car c where c.carframenumber like "%"#{carframenumber}"%"
+     select c.id from car c
+    <where>
+      c.carframenumber in
+      <foreach collection="list" index="index" separator="," item="item" open="(" close=")">
+        #{item}
+      </foreach>
+    </where>
     )
+    and ac.type=#{type}
     )
   </select>
+
   <select id="lossAuctionCount" resultType="int">
     select count(1) from auctioninfo a where a.state='4'
   </select>
@@ -581,4 +598,10 @@
     order by a.id desc
     limit #{page},#{limit}
   </select>
+
+  <!--设置auctioninfo表的流拍金额为当前传入金额-->
+  <update id="updateLossAuction">
+      update auctioninfo  a set a.transactionamount = #{transactionamount} where a.id=#{id}
+    </update>
+
 </mapper>

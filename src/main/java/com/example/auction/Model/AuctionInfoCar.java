@@ -6,8 +6,11 @@ package com.example.auction.Model;
  * @注释： 中间表，保存竞拍和汽车数据，auctioninfo/car
  */
 public class AuctionInfoCar {
-    Integer auctioninfoid;
-    Integer carid;
+    private Integer auctioninfoid;
+    private Integer carid;
+    //0:正常的1:流拍的
+    private Integer type;
+
 
     public Integer getCarid() {
         return carid;
@@ -23,5 +26,13 @@ public class AuctionInfoCar {
 
     public void setCarid(Integer carid) {
         this.carid = carid;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 }

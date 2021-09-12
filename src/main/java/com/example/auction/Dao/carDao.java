@@ -29,6 +29,5 @@ public interface carDao {
 
    Map offercarList(@Param("carid") Integer carid, @Param("bidderid") String bidderid);
 
-    List<car> getByIdAndCarFrameNumber(Map map);
     int getByIdAndCarFrameNumberCount(@Param("carframenumber")String carframenumber);
 }

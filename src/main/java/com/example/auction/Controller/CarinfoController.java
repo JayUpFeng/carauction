@@ -5,6 +5,8 @@ import cn.afterturn.easypoi.excel.entity.ImportParams;
 import com.example.auction.Model.*;
 import com.example.auction.Service.PublicUserService;
 import com.example.auction.Service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
@@ -20,7 +22,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
+import java.util.concurrent.atomic.AtomicInteger;
+@Api("CarinfoController相关的api")
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/car")
@@ -133,7 +136,7 @@ public class CarinfoController {
         long s = System.currentTimeMillis();
         Map m = userService.listauctioninfopaging(map);
         long e = System.currentTimeMillis();
-        System.out.println("成交列表时间====" + (e - s));
+        System.out.println("成交、违规、流拍列表时间====" + (e - s));
         return m;
     }
 
@@ -530,7 +533,7 @@ public class CarinfoController {
     public Map uploadCarExcel(@RequestPart("file") MultipartFile multipartFile, HttpServletRequest request) {
         String name = multipartFile.getOriginalFilename();
         request.getSession().setAttribute("upFile", name);
-        String fileSavePath = carExcel + UUID.randomUUID().toString().replaceAll("-","");
+        String fileSavePath = carExcel + UUID.randomUUID().toString().replaceAll("-", "");
         try {
             multipartFile.transferTo(new File(fileSavePath + name));
         } catch (Exception e) {
@@ -542,49 +545,75 @@ public class CarinfoController {
             params.setTitleRows(0);
             params.setHeadRows(1);
             List<car> result = ExcelImportUtil.importExcel(file, car.class, params);
-            executorService.execute(() -> {
-                if (result != null && !result.isEmpty()) {
-                    for (int i = 0; i < 1; i++) {
-                        car car = result.get(i);
-                        String state = car.getCarstate();
-                        if (state != null && !"null".equals(state)) {
-                            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-                            Date insuranceexpiredate = car.getInsuranceexpiredate();
-                            Date yearexpiredate = car.getYearexpiredate();
-                            String insuranceexpire = sdf.format(insuranceexpiredate);
-                            String yearexpire = sdf.format(yearexpiredate);
-                            car.setInsuranceexpire(insuranceexpire);
-                            car.setYearexpire(yearexpire);
-                            //保存图片
-                            String carimg = car.getCarimg();
-                            String carimgAddr = writePic(carimg);
-                            String carbosomimg = car.getCarbosomimg();
-                            String carbosomimgAddr = writePic(carbosomimg);
-                            String carmotorimg = car.getCarmotorimg();
-                            String carmotorimgAddr = writePic(carmotorimg);
-                            car.setCarimg(carimgAddr);
-                            car.setCarbosomimg(carbosomimgAddr);
-                            car.setCarmotorimg(carmotorimgAddr);
-                            carDao.insertSelective(car);
+            AtomicInteger success = new AtomicInteger(0);
+            AtomicInteger field = new AtomicInteger(0);
+            if (result != null && !result.isEmpty()) {
+                //记录excel中重复的车架号，如果有则失败条数+1，如果没有则保存入库
+                Map<String,Integer> frameMap=new HashMap<>();
+                for (int i = 0; i < 1; i++) {
+                    car car = result.get(i);
+                    String state = car.getCarstate();
+                    String carframenumber = car.getCarframenumber();
+                    if (frameMap.containsKey(carframenumber)){
+                        //失败条数增1
+                        field.incrementAndGet();
+                    }else{
+                        frameMap.put(carframenumber,0);
+                        int count = carDao.getByIdAndCarFrameNumberCount(carframenumber);
+                        //1、记录导入成功数量和失败数量
+                        //2、车架号和数据库一样，不导入，excel中车架号重复，不导入
+                        //数据库中有记录，不导入
+                        if (count>0){
+                            //失败条数增1
+                            field.incrementAndGet();
+                        }else{
+                            if (state != null && !"null".equals(state)) {
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                                Date insuranceexpiredate = car.getInsuranceexpiredate();
+                                Date yearexpiredate = car.getYearexpiredate();
+                                String insuranceexpire = sdf.format(insuranceexpiredate);
+                                String yearexpire = sdf.format(yearexpiredate);
+                                car.setInsuranceexpire(insuranceexpire);
+                                car.setYearexpire(yearexpire);
+                                //保存图片
+                                String carimg = car.getCarimg();
+                                String carimgAddr = writePic(carimg);
+                                String carbosomimg = car.getCarbosomimg();
+                                String carbosomimgAddr = writePic(carbosomimg);
+                                String carmotorimg = car.getCarmotorimg();
+                                String carmotorimgAddr = writePic(carmotorimg);
+                                car.setCarimg(carimgAddr);
+                                car.setCarbosomimg(carbosomimgAddr);
+                                car.setCarmotorimg(carmotorimgAddr);
+                                int saveCount = carDao.insertSelective(car);
+                                if (saveCount>0){
+                                    success.incrementAndGet();
+                                }else{
+                                    field.incrementAndGet();
+                                }
+                            }
                         }
                     }
                 }
-            });
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Map<String,Object> m=new HashMap<>();
+        Map<String, Object> m = new HashMap<>();
         m.put("msg", 1);
         m.put("code", 0);
+        m.put("success", 0);
+        m.put("filed", 0);
         return m;
     }
-    public String writePic(String pathName){
-        if (StringUtils.isEmpty(pathName)){
+
+    public String writePic(String pathName) {
+        if (StringUtils.isEmpty(pathName)) {
             return "";
         }
         String type = ".png";
         String picName = UUID.randomUUID().toString().replaceAll("-", "");
-        String targetPath=carExcel+picName+type;
+        String targetPath = carExcel + picName + type;
         try {
             URL url = new URL(pathName);
             //打开链接
@@ -605,14 +634,15 @@ public class CarinfoController {
         }
         return "";
     }
-    public static byte[] readInputStream(InputStream inStream) throws Exception{
+
+    public static byte[] readInputStream(InputStream inStream) throws Exception {
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
         //创建一个Buffer字符串
         byte[] buffer = new byte[1024];
         //每次读取的字符串长度，如果为-1，代表全部读取完毕
         int len = 0;
         //使用一个输入流从buffer里把数据读取出来
-        while( (len=inStream.read(buffer)) != -1 ){
+        while ((len = inStream.read(buffer)) != -1) {
             //用输出流往buffer里写入数据，中间参数代表从哪个位置开始读，len代表读取的长度
             outStream.write(buffer, 0, len);
         }
@@ -623,24 +653,44 @@ public class CarinfoController {
     }
 
     /**
-     * 流拍列表
+     * 流拍操作
+     *
      * @param map
      * @return
      */
     @RequestMapping("/lossAuction")
     @ResponseBody
-    public Map<String,Object> lossAuction(@RequestBody Map map) {
+    public Map<String, Object> lossAuction(@RequestBody Map map) {
         return userService.lossAuction(map);
     }
+
     /**
      * 修改流拍最高出价人
+     *
      * @param map
      * @return
      */
-    @RequestMapping("/updateLossAuction")
+    @PostMapping("/updateLossAuction")
     @ResponseBody
-    public Map<String,Object> updateLossAuction(@RequestBody Map map) {
+    public Map<String, Object> updateLossAuction(@RequestBody Map map) {
         return userService.updateLossAuction(map);
+    }
+
+    //成交、违规列表查询车辆
+    @ApiOperation(value="成交、违规列表查询车辆")
+    @PostMapping(value = "/carInfoList")
+    @ResponseBody
+    public Map<String, Object> carInfoList(@RequestBody Map map) {
+        map = userService.carInfoList(map);
+        return map;
+    }
+    @ApiOperation(value="流拍列表查询车辆")
+    //流拍列表查询车辆
+    @PostMapping(value = "/carCopyList")
+    @ResponseBody
+    public Map<String, Object> carCopyList(@RequestBody Map map) {
+        map = userService.carCopyList(map);
+        return map;
     }
 }
 
