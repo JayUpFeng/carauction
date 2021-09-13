@@ -26,7 +26,9 @@ public class car {
     private String keynumber;
     @Excel(name = "行驶里程")
     private String actualservicelife;
-    @Excel(name = "上牌日期")
+    @Excel(name = "上牌日期",importFormat="yyyy/MM/dd")
+    private Date onbrandtimedate;
+    //数据库保存字段
     private String onbrandtime;
     @Excel(name = "行驶证")
     private String drivinglicense;
@@ -402,6 +404,14 @@ public class car {
 
     public void setYearexpiredate(Date yearexpiredate) {
         this.yearexpiredate = yearexpiredate;
+    }
+
+    public Date getOnbrandtimedate() {
+        return onbrandtimedate;
+    }
+
+    public void setOnbrandtimedate(Date onbrandtimedate) {
+        this.onbrandtimedate = onbrandtimedate;
     }
 
     @Override

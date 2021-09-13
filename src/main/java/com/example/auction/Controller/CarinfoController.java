@@ -540,41 +540,48 @@ public class CarinfoController {
             e.printStackTrace();
         }
         File file = new File(fileSavePath + name);
+        AtomicInteger success = new AtomicInteger(0);
+        AtomicInteger failed = new AtomicInteger(0);
+        StringBuilder builder=new StringBuilder();
+        Map<String, Object> m = new HashMap<>();
         try {
             ImportParams params = new ImportParams();
             params.setTitleRows(0);
             params.setHeadRows(1);
             List<car> result = ExcelImportUtil.importExcel(file, car.class, params);
-            AtomicInteger success = new AtomicInteger(0);
-            AtomicInteger field = new AtomicInteger(0);
             if (result != null && !result.isEmpty()) {
                 //记录excel中重复的车架号，如果有则失败条数+1，如果没有则保存入库
                 Map<String,Integer> frameMap=new HashMap<>();
-                for (int i = 0; i < 1; i++) {
+                for (int i = 0; i < result.size(); i++) {
                     car car = result.get(i);
                     String state = car.getCarstate();
                     String carframenumber = car.getCarframenumber();
-                    if (frameMap.containsKey(carframenumber)){
-                        //失败条数增1
-                        field.incrementAndGet();
-                    }else{
-                        frameMap.put(carframenumber,0);
-                        int count = carDao.getByIdAndCarFrameNumberCount(carframenumber);
-                        //1、记录导入成功数量和失败数量
-                        //2、车架号和数据库一样，不导入，excel中车架号重复，不导入
-                        //数据库中有记录，不导入
-                        if (count>0){
+                    if (state != null && !"null".equals(state)) {
+                        if (frameMap.containsKey(carframenumber)){
                             //失败条数增1
-                            field.incrementAndGet();
+                            failed.incrementAndGet();
+                            builder.append(carframenumber).append(",");
                         }else{
-                            if (state != null && !"null".equals(state)) {
+                            frameMap.put(carframenumber,0);
+                            int count = carDao.getByIdAndCarFrameNumberCount(carframenumber);
+                            //1、记录导入成功数量和失败数量
+                            //2、车架号和数据库一样，不导入，excel中车架号重复，不导入
+                            //数据库中有记录，不导入
+                            if (count>0){
+                                //失败条数增1
+                                failed.incrementAndGet();
+                                builder.append(carframenumber).append(",");
+                            }else{
                                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                                 Date insuranceexpiredate = car.getInsuranceexpiredate();
                                 Date yearexpiredate = car.getYearexpiredate();
+                                Date onbrandtimedate = car.getOnbrandtimedate();
                                 String insuranceexpire = sdf.format(insuranceexpiredate);
                                 String yearexpire = sdf.format(yearexpiredate);
+                                String onbrandtime = sdf.format(onbrandtimedate);
                                 car.setInsuranceexpire(insuranceexpire);
                                 car.setYearexpire(yearexpire);
+                                car.setOnbrandtime(onbrandtime);
                                 //保存图片
                                 String carimg = car.getCarimg();
                                 String carimgAddr = writePic(carimg);
@@ -585,11 +592,14 @@ public class CarinfoController {
                                 car.setCarimg(carimgAddr);
                                 car.setCarbosomimg(carbosomimgAddr);
                                 car.setCarmotorimg(carmotorimgAddr);
+                                //2是没有标书关联。1是有关联
+                                car.setOther("2");
                                 int saveCount = carDao.insertSelective(car);
                                 if (saveCount>0){
                                     success.incrementAndGet();
                                 }else{
-                                    field.incrementAndGet();
+                                    failed.incrementAndGet();
+                                    builder.append(carframenumber).append(",");
                                 }
                             }
                         }
@@ -598,12 +608,15 @@ public class CarinfoController {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            m.put("msg", "后台服务器异常，请联系管理员！");
         }
-        Map<String, Object> m = new HashMap<>();
-        m.put("msg", 1);
+        String msg = builder.toString();
+        if (!StringUtils.isEmpty(msg)){
+            m.put("msg", "车架号："+msg+"导入失败！");
+        }
         m.put("code", 0);
-        m.put("success", 0);
-        m.put("filed", 0);
+        m.put("success", success.get());
+        m.put("failed", failed.get());
         return m;
     }
 

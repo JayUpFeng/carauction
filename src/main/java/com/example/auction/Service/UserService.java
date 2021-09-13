@@ -53,8 +53,6 @@ public class UserService {
     @Autowired
     private AuctionInfoCarDao auctionInfoCarDao;
     @Autowired
-    private AuctionInfoUserLossDao auctionInfoUserLossDao;
-    @Autowired
     private CarCopyDao carCopyDao;
     @Value("${customer.email}")
     private String email;
@@ -3870,13 +3868,23 @@ public class UserService {
                 totalcount = auctionDao.selectList6Count(map);
                 resultList = auctionDao.selectList6(map);
             }
-            //从中间表查询当前用户信息，并且返回
             for (auctioninfo a : resultList) {
-                Integer id = a.getId();
-                Userinfo userInfo = auctionInfoUserLossDao.getUserInfo(id);
-                Map<String, Object> userMap = new HashMap<>();
-                userMap.put("userinfo", userInfo);
-                list.add(userMap);
+                biddermap.put("auctionnumber", a.getAuctionnumber());
+                if (!"".equals(map.get("userid2").toString())) {
+                    biddermap.put("userid2", map.get("userid2").toString());
+                }
+                if (!"".equals(map.get("auctionstate").toString())) {
+                    biddermap.put("auctionstate", map.get("auctionstate").toString());
+                }
+                if (!"".equals(map.get("paymentstate").toString())) {
+                    biddermap.put("paymentstate", map.get("paymentstate").toString());
+                }
+                Map auctionMap = JSON.parseObject(JSON.toJSONString(a), Map.class);
+                List<Map> bidderList = userdao.selectbidderList(biddermap);
+                if (bidderList.size() > 0 && bidderList != null) {
+                    auctionMap.put("bidderList", bidderList);
+                    list.add(auctionMap);
+                }
             }
         }
         if (list.size() > 0) {
@@ -4132,7 +4140,6 @@ public class UserService {
             if (bidderList != null && !bidderList.isEmpty()) {
                 bidder bidder = bidderList.get(0);
                 Integer tmp = bidder.getOther();
-                Integer userId = bidder.getUserid();
                 Integer price = bidder.getOther();
                 Map<Integer, Integer> intMap = new HashMap<>();
                 intMap.put(bidder.getOther(), bidder.getId());
@@ -4149,7 +4156,6 @@ public class UserService {
                             if (result != null) {
                                 if (result > id) {
                                     intMap.put(other, id);
-                                    userId = b.getUserid();
                                 }
                             }
                         }
@@ -4158,12 +4164,7 @@ public class UserService {
                         price = entry.getKey();
                     }
                 }
-                AuctionInfoUserLoss loss = new AuctionInfoUserLoss();
-                loss.setAuctioninfoid(a.getId());
-                loss.setUserid(userId);
-                loss.setPrice(price);
                 auctioninfo.setTransactionamount(price+"");
-                auctionInfoUserLossDao.save(loss);
                 //生成流拍凭证,前端传的base64字符串
                 String imgSrc = map.get("imgBase64").toString();
                 if (!StringUtils.isEmpty(imgSrc)) {
