@@ -1,6 +1,5 @@
 package com.example.auction.Dao;
 
-import com.example.auction.Model.AuctionInfoUserLoss;
 import com.example.auction.Model.acutionListInfo;
 import com.example.auction.Model.auctioninfo;
 import org.apache.ibatis.annotations.Mapper;
