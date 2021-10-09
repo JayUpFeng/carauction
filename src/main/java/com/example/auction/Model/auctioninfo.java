@@ -2,7 +2,7 @@ package com.example.auction.Model;
 
 import java.util.List;
 
-public class auctioninfo {
+public class auctioninfo {//标书表
     private Integer id;
 
     private String auctiontime;
@@ -26,6 +26,8 @@ public class auctioninfo {
     private String auctionjurisdiction;
     //成交金额、流拍最高出价者
     private String transactionamount;
+    //成交、违规、流拍更新时间
+    private String updatetime;
     private List<car> carList;
     private List<bidder> bidderList;
     //成交、流拍车辆凭证
@@ -37,7 +39,7 @@ public class auctioninfo {
     public auctioninfo(Integer id, String auctiontime, String cycle, String carid, String floor, String assessmentprice,
                        String other, String auctionnumber, String state, String auctionendtime, String cardealers,
                        String issesscar, String auctionjurisdiction, String transactionamount,
-                       String carimg) {
+                       String carimg,String updatetime) {
         this.id = id;
         this.auctiontime = auctiontime;
         this.cycle = cycle;
@@ -53,6 +55,7 @@ public class auctioninfo {
         this.auctionjurisdiction = auctionjurisdiction;
         this.transactionamount = transactionamount;
         this.carimg = carimg;
+        this.updatetime = updatetime;
     }
 
     public String getTransactionamount() {
@@ -217,6 +220,14 @@ public class auctioninfo {
 
     public void setImgBase64(String imgBase64) {
         this.imgBase64 = imgBase64;
+    }
+
+    public String getUpdatetime() {
+        return updatetime;
+    }
+
+    public void setUpdatetime(String updatetime) {
+        this.updatetime = updatetime;
     }
 
     @Override

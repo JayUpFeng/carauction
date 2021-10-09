@@ -375,6 +375,7 @@
         </if>
 
         order by b.updateday desc
+        limit #{page},#{limit}
     </select>
     <select id="selectAllUserInfo" resultType="java.util.Map">
         SELECT u.id uid,u.username,u.tel,u.sex,u.address,u.certificates,u.other,u.participate,u.openid,u.state ustate,u.usernumber usernumber,
@@ -493,4 +494,20 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="getPhonesByIds" resultType="string">
+        SELECT  u.tel from  userinfo u
+        <where>
+            u.id in
+            <foreach collection="list" index="index" separator="," item="item" open="(" close=")">
+                #{item}
+            </foreach>
+        </where>
+    </select>
+    <select id="getPhonesByParticipate" resultType="string">
+        SELECT  u.tel from  userinfo u
+        <where>
+            u.participate=1
+        </where>
+    </select>
 </mapper>

@@ -72,4 +72,8 @@ public interface Userdao {
     Integer getMaxUserNumber();
     List<Userinfo> selectAllUsers();
     Integer updateAllUser(Userinfo userinfo);
+    //根据id获取所有手机号
+    List<String> getPhonesByIds(List<Integer> list);
+    //获取所有缴纳保证金的手机号
+    List<String> getPhonesByParticipate();
 }

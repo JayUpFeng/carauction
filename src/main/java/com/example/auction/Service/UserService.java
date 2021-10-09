@@ -53,6 +53,8 @@ public class UserService {
     @Autowired
     private AuctionInfoCarDao auctionInfoCarDao;
     @Autowired
+    private AuctionInfoUserLossDao auctionInfoUserLossDao;
+    @Autowired
     private CarCopyDao carCopyDao;
     @Value("${customer.email}")
     private String email;
@@ -82,7 +84,7 @@ public class UserService {
     public static long midTime;
     String token2 = null;
     String template_id = null;
-
+    SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     public Map addUser(Userinfo userinfo) {
         System.out.println("userinfo=" + userinfo);
         TemplateUtils templateUtils = new TemplateUtils();
@@ -977,10 +979,9 @@ public class UserService {
         System.out.println("old2:for时间====" + (end - start));
         return list;
     }
-
-    public List new3(Map map, List list, List<acutionListInfo> acutionListInfoList, Map biddermap) throws ParseException {
+    public List new3(Map map,List list,List<acutionListInfo> acutionListInfoList,Map biddermap) throws ParseException {
 //        List<auctioninfo> auctioninfoList = auctionDao.selectList(map);
-        List<auctioninfo> auctioninfoList = auctionDao.selectList6(map);
+        List<auctioninfo> auctioninfoList = auctionDao.selectListNew3(map);
         gettimecl(auctioninfoList, acutionListInfoList);
         buildList(acutionListInfoList);
         list = new ArrayList();
@@ -1002,7 +1003,7 @@ public class UserService {
             if (bidderList != null && bidderList.size() > 0) {
                 auctionMap.put("bidderList", bidderList);
                 //后台管理系统没有传userid
-                String userid2 = map.get("userid2").toString();
+                String userid2 =map.get("userid2").toString();
                 if (userid2 == null || "".equals(userid2)) {
                     list.add(auctionMap);
                 } else {
@@ -1014,7 +1015,7 @@ public class UserService {
                             if (state == 1) {
                             }
                             //单企业微信用户
-                            if (state == 0 || state == 2) {
+                            if (state == 0 ||state==2) {
                                 list.add(auctionMap);
                             }
                         }
@@ -1022,10 +1023,6 @@ public class UserService {
                 }
             }
         }
-      /*  list = new ArrayList();
-        List<Map> maps = auctionDao.selectList6(map);
-        buildMap(maps);
-        list.add(maps);*/
         return list;
     }
 
@@ -1481,6 +1478,18 @@ public class UserService {
         } else if ("1".equals(map.get("state").toString()) && "1".equals(map.get("auctionstate").toString()) && "2".equals(map.get("paymentstate").toString())) {
             long start = System.currentTimeMillis();
 //            list=old3(map,list,acutionListInfoList,biddermap);
+            Integer pageInt = 1;
+            Integer limitInt = 10;
+            Object page = map.get("page");
+            if (page != null) {
+                pageInt = Integer.parseInt(page.toString());
+            }
+            Object limit = map.get("limit");
+            if (limit != null) {
+                limitInt = Integer.parseInt(limit.toString());
+            }
+            map.put("page", (pageInt - 1) * limitInt);
+            map.put("limit", limitInt);
             list = new3(map, list, acutionListInfoList, biddermap);
             long end = System.currentTimeMillis();
             System.out.println("new3时间======" + (end - start));//个人成交列表（慢）
@@ -3195,6 +3204,8 @@ public class UserService {
                     String imgTar = carAddress + auctioninfo.getAuctionnumber() + "-" + auctioninfo.getId();
                     ImgUtil.generateImage(imgSrc, "/www/server" + imgTar + ".png");
                     auctioninfo.setCarimg(imgTar + ".png");
+                    String currentDate = sdf.format(new Date());
+                    auctioninfo.setUpdatetime(currentDate);
                     auctionDao.updateCarImg(auctioninfo);
                 }
             } catch (Exception e) {
@@ -3285,6 +3296,18 @@ public class UserService {
     public Map selectAllUser(Map map) {
         Map m = new HashMap();
         m.put("msg", 0);
+        Integer pageInt = 1;
+        Integer limitInt = 10;
+        Object page = map.get("page");
+        if (page != null) {
+            pageInt = Integer.parseInt(page.toString());
+        }
+        Object limit = map.get("limit");
+        if (limit != null) {
+            limitInt = Integer.parseInt(limit.toString());
+        }
+        map.put("page", (pageInt - 1) * limitInt);
+        map.put("limit", limitInt);
         List<Map> u = userdao.selectAllUser(map);
         if (u != null) {
             m.put("user", u);
@@ -3313,6 +3336,8 @@ public class UserService {
             auctioninfo.setId(a.getId());
             //设置成5，为流拍状态。
             auctioninfo.setState("4");
+            String currentDate = sdf.format(new Date());
+            auctioninfo.setUpdatetime(currentDate);
             auctionDao.updateByPrimaryKeySelective(auctioninfo);
             m.put("msg", 1);
             m.put("code", 0);
@@ -3765,7 +3790,20 @@ public class UserService {
         Object page = map.get("page");
         if (page != null) {
             pageInt = Integer.parseInt(page.toString());
-            map.put("page", pageInt - 1);
+        }
+        Object limit = map.get("limit");
+        if (limit != null) {
+            limitInt = Integer.parseInt(limit.toString());
+        }
+        map.put("page", (pageInt - 1) * limitInt);
+        map.put("limit", limitInt);
+        //时间查询条件
+        Object auctiontime = map.get("sort");
+        if (auctiontime==null){
+            map.put("sort","a.updatetime");
+        }else{
+            String auctime = map.get("sort").toString();
+            map.put("sort","a."+auctime);
         }
         //查询总数量
         int totalcount = 0;
@@ -3862,29 +3900,19 @@ public class UserService {
                 map.put("list", carframenumberList);
                 //中间表查询type=1流拍的数据
                 map.put("type", 1);
-                totalcount = auctionDao.selectList7Count(map);
-                resultList = auctionDao.selectList7(map);
+                totalcount = auctionDao.selectList9Count(map);
+                resultList = auctionDao.selectList9(map);
             } else {
-                totalcount = auctionDao.selectList6Count(map);
-                resultList = auctionDao.selectList6(map);
+                totalcount = auctionDao.selectList8Count(map);
+                resultList = auctionDao.selectList8(map);
             }
+            //从中间表查询当前用户信息，并且返回
             for (auctioninfo a : resultList) {
-                biddermap.put("auctionnumber", a.getAuctionnumber());
-                if (!"".equals(map.get("userid2").toString())) {
-                    biddermap.put("userid2", map.get("userid2").toString());
-                }
-                if (!"".equals(map.get("auctionstate").toString())) {
-                    biddermap.put("auctionstate", map.get("auctionstate").toString());
-                }
-                if (!"".equals(map.get("paymentstate").toString())) {
-                    biddermap.put("paymentstate", map.get("paymentstate").toString());
-                }
+                Integer id = a.getId();
+                Userinfo userInfo = auctionInfoUserLossDao.getUserInfo(id);
                 Map auctionMap = JSON.parseObject(JSON.toJSONString(a), Map.class);
-                List<Map> bidderList = userdao.selectbidderList(biddermap);
-                if (bidderList.size() > 0 && bidderList != null) {
-                    auctionMap.put("bidderList", bidderList);
-                    list.add(auctionMap);
-                }
+                auctionMap.put("userinfo", userInfo);
+                list.add(auctionMap);
             }
         }
         if (list.size() > 0) {
@@ -4056,7 +4084,19 @@ public class UserService {
         if (autionInfoIdObj != null) {
             autionInfoId = Integer.parseInt(autionInfoIdObj.toString());
         }
+        auctioninfo data = auctionDao.selectByPrimaryKey(autionInfoId);
         auctioninfo a = new auctioninfo();
+        //生成流拍凭证,前端传的base64字符串
+        String imgSrc = map.get("imgBase64").toString();
+        if (!StringUtils.isEmpty(imgSrc)) {
+            String imgTar = carAddress + data.getAuctionnumber() + "-" + data.getId();
+            try {
+                ImgUtil.generateImage(imgSrc, "/www/server" + imgTar + ".png");
+                a.setCarimg(imgTar + ".png");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         a.setId(autionInfoId);
         a.setTransactionamount(transactionamount);
         auctionDao.updateLossAuction(a);
@@ -4107,6 +4147,12 @@ public class UserService {
         car car = new car();
         auctioninfo a = auctionDao.selectByPrimaryKey(Integer.parseInt(map.get("auctioninfoid").toString()));
         if (a != null) {
+            String state = a.getState();
+            if ("5".equals(state)){
+                m.put("code", 0);
+                m.put("msg", "当前标书已经流拍");
+                return m;
+            }
             String[] carstr = a.getCarid().split(",");
             for (String carid : carstr) {
                 Integer carId = Integer.parseInt(carid);
@@ -4136,48 +4182,35 @@ public class UserService {
             //清除标书所有竞拍数据，
             //bidderDao.deleteByAuctionNumber(a.getAuctionnumber());
             //同时记录标书流拍数据和当前最高出价者及最高出价，同时出价高的按id最小的来
-            List<bidder> bidderList = bidderDao.getMaxPrice(a.getAuctionnumber());
-            if (bidderList != null && !bidderList.isEmpty()) {
-                bidder bidder = bidderList.get(0);
-                Integer tmp = bidder.getOther();
-                Integer price = bidder.getOther();
-                Map<Integer, Integer> intMap = new HashMap<>();
-                intMap.put(bidder.getOther(), bidder.getId());
-                if (bidderList.size()>1){
-                    for (bidder b : bidderList) {
-                        Integer other = b.getOther();
-                        Integer id = b.getId();
-                        //出价高于第一个人，直接就是他
-                        if (other>tmp){
-                            intMap.put(other, id);
-                        }else{
-                            Integer result = intMap.get(other);
-                            //出价等于第一个人，比较id大小，选小的
-                            if (result != null) {
-                                if (result > id) {
-                                    intMap.put(other, id);
-                                }
-                            }
-                        }
-                    }
-                    for (Map.Entry<Integer, Integer> entry : intMap.entrySet()) {
-                        price = entry.getKey();
-                    }
+            Object userIdObj = map.get("userid");
+            if (userIdObj!=null){
+                String userId = userIdObj.toString();
+                if (!StringUtils.isEmpty(userId)){
+                    AuctionInfoUserLoss loss = new AuctionInfoUserLoss();
+                    loss.setAuctioninfoid(a.getId());
+                    loss.setUserid(Integer.parseInt(userId));
+                    loss.setPrice(Integer.parseInt(map.get("other").toString()));
+                    //设置标书的最高价格
+                    auctioninfo.setTransactionamount(map.get("other").toString());
+                    auctionInfoUserLossDao.save(loss);
                 }
-                auctioninfo.setTransactionamount(price+"");
-                //生成流拍凭证,前端传的base64字符串
-                String imgSrc = map.get("imgBase64").toString();
-                if (!StringUtils.isEmpty(imgSrc)) {
-                    String imgTar = carAddress + a.getAuctionnumber() + "-" + a.getId();
-                    try {
-                        ImgUtil.generateImage(imgSrc, "/www/server" + imgTar + ".png");
-                        auctioninfo.setCarimg(imgTar + ".png");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                auctionDao.updateByPrimaryKeySelective(auctioninfo);
             }
+            //没有人竞拍，竞拍价格为空，
+            //生成流拍凭证,前端传的base64字符串
+            String imgSrc = map.get("imgBase64").toString();
+            if (!StringUtils.isEmpty(imgSrc)) {
+                String imgTar = carAddress + a.getAuctionnumber() + "-" + a.getId();
+                try {
+                    ImgUtil.generateImage(imgSrc, "/www/server" + imgTar + ".png");
+                    auctioninfo.setCarimg(imgTar + ".png");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            Date date=new Date();
+            String currentDate = sdf.format(date);
+            auctioninfo.setUpdatetime(currentDate);
+            auctionDao.updateByPrimaryKeySelective(auctioninfo);
             m.put("msg", 1);
             m.put("code", 0);
         } else {

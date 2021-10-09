@@ -1,6 +1,6 @@
 package com.example.auction.Model;
 
-public class bidder {
+public class bidder {//竞拍表
     private Integer id;
 
     private Integer userid;

@@ -2,9 +2,13 @@ package com.example.auction.Controller;
 
 import cn.afterturn.easypoi.excel.ExcelImportUtil;
 import cn.afterturn.easypoi.excel.entity.ImportParams;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.example.auction.Configuration.TemplateUtils;
 import com.example.auction.Model.*;
 import com.example.auction.Service.PublicUserService;
 import com.example.auction.Service.UserService;
+import com.example.auction.util.HttpUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +27,7 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
+
 @Api("CarinfoController相关的api")
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -36,7 +41,10 @@ public class CarinfoController {
     private PublicUserService publicUserService;
     @Autowired
     private com.example.auction.Dao.carDao carDao;
-
+    @Value("${cbsUrl}")
+    private String cbsUrl;
+    @Value("${cbsImgUrl}")
+    private String cbsImgUrl;
     //添加用户
     @RequestMapping(value = "/addUser")
     @ResponseBody
@@ -231,6 +239,7 @@ public class CarinfoController {
 //    }
 
     //修改竞拍人状态
+    //第一次生成凭证的接口，成交操作接口
     @RequestMapping(value = "/updatebidderstate")
     @ResponseBody
     public Map updatebidderstate(@RequestBody Map map) {
@@ -539,11 +548,13 @@ public class CarinfoController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        String jurisdiction =request.getParameter("jurisdiction");
         File file = new File(fileSavePath + name);
         AtomicInteger success = new AtomicInteger(0);
         AtomicInteger failed = new AtomicInteger(0);
-        StringBuilder builder=new StringBuilder();
+        StringBuilder builder = new StringBuilder();
         Map<String, Object> m = new HashMap<>();
+        m.put("msg", 1);
         try {
             ImportParams params = new ImportParams();
             params.setTitleRows(0);
@@ -551,56 +562,37 @@ public class CarinfoController {
             List<car> result = ExcelImportUtil.importExcel(file, car.class, params);
             if (result != null && !result.isEmpty()) {
                 //记录excel中重复的车架号，如果有则失败条数+1，如果没有则保存入库
-                Map<String,Integer> frameMap=new HashMap<>();
+                Map<String, Integer> frameMap = new HashMap<>();
                 for (int i = 0; i < result.size(); i++) {
                     car car = result.get(i);
                     String state = car.getCarstate();
                     String carframenumber = car.getCarframenumber();
                     if (state != null && !"null".equals(state)) {
-                        if (frameMap.containsKey(carframenumber)){
+                        if (frameMap.containsKey(carframenumber)) {
                             //失败条数增1
                             failed.incrementAndGet();
                             builder.append(carframenumber).append(",");
-                        }else{
-                            frameMap.put(carframenumber,0);
-                            int count = carDao.getByIdAndCarFrameNumberCount(carframenumber);
-                            //1、记录导入成功数量和失败数量
-                            //2、车架号和数据库一样，不导入，excel中车架号重复，不导入
-                            //数据库中有记录，不导入
-                            if (count>0){
-                                //失败条数增1
-                                failed.incrementAndGet();
-                                builder.append(carframenumber).append(",");
-                            }else{
-                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                                Date insuranceexpiredate = car.getInsuranceexpiredate();
-                                Date yearexpiredate = car.getYearexpiredate();
-                                Date onbrandtimedate = car.getOnbrandtimedate();
-                                String insuranceexpire = sdf.format(insuranceexpiredate);
-                                String yearexpire = sdf.format(yearexpiredate);
-                                String onbrandtime = sdf.format(onbrandtimedate);
-                                car.setInsuranceexpire(insuranceexpire);
-                                car.setYearexpire(yearexpire);
-                                car.setOnbrandtime(onbrandtime);
-                                //保存图片
-                                String carimg = car.getCarimg();
-                                String carimgAddr = writePic(carimg);
-                                String carbosomimg = car.getCarbosomimg();
-                                String carbosomimgAddr = writePic(carbosomimg);
-                                String carmotorimg = car.getCarmotorimg();
-                                String carmotorimgAddr = writePic(carmotorimg);
-                                car.setCarimg(carimgAddr);
-                                car.setCarbosomimg(carbosomimgAddr);
-                                car.setCarmotorimg(carmotorimgAddr);
-                                //2是没有标书关联。1是有关联
-                                car.setOther("2");
-                                int saveCount = carDao.insertSelective(car);
-                                if (saveCount>0){
-                                    success.incrementAndGet();
-                                }else{
+                        } else {
+                            //设置userid
+                            if (!StringUtils.isEmpty(jurisdiction)){
+                                car.setJurisdiction(jurisdiction);
+                            }
+                            String carstate = car.getCarstate();
+                            if ("0".equals(carstate)) {
+                                frameMap.put(carframenumber, 0);
+                                int count = carDao.getByIdAndCarFrameNumberCount(carframenumber);
+                                //1、记录导入成功数量和失败数量
+                                //2、车架号和数据库一样，不导入，excel中车架号重复，不导入
+                                //数据库中有记录，不导入
+                                if (count > 0) {
+                                    //失败条数增1
                                     failed.incrementAndGet();
                                     builder.append(carframenumber).append(",");
+                                }else{
+                                    saveCarData(car,success,failed,builder,carframenumber);
                                 }
+                            }else{
+                                saveCarData(car,success,failed,builder,carframenumber);
                             }
                         }
                     }
@@ -611,13 +603,87 @@ public class CarinfoController {
             m.put("msg", "后台服务器异常，请联系管理员！");
         }
         String msg = builder.toString();
-        if (!StringUtils.isEmpty(msg)){
-            m.put("msg", "车架号："+msg+"导入失败！");
+        Integer count = success.get();
+        if (!StringUtils.isEmpty(msg)) {
+            if (count > 0) {
+                m.put("msg", count + "条导入成功！ " + "车架号：" + msg + "导入失败！");
+            } else {
+                m.put("msg", "车架号：" + msg + "导入失败！");
+            }
         }
         m.put("code", 0);
-        m.put("success", success.get());
+        m.put("success", count);
         m.put("failed", failed.get());
         return m;
+    }
+    public void saveCarData(car car, AtomicInteger success, AtomicInteger failed, StringBuilder builder, String carframenumber){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date insuranceexpiredate = car.getInsuranceexpiredate();
+        Date yearexpiredate = car.getYearexpiredate();
+        Date onbrandtimedate = car.getOnbrandtimedate();
+        if (insuranceexpiredate != null) {
+            String insuranceexpire = sdf.format(insuranceexpiredate);
+            car.setInsuranceexpire(insuranceexpire);
+        }
+        if (yearexpiredate != null) {
+            String yearexpire = sdf.format(yearexpiredate);
+            car.setYearexpire(yearexpire);
+        }
+        if (onbrandtimedate != null) {
+            String onbrandtime = sdf.format(onbrandtimedate);
+            car.setOnbrandtime(onbrandtime);
+        }
+        //保存图片
+        String carimg = car.getCarimg();
+        String orderNo = car.getOrderNo();
+        //车外部图片，从查博士获取，根据orderid
+        if (StringUtils.isEmpty(carimg)&&!StringUtils.isEmpty(orderNo)){
+            Map<String,Object> params=new HashMap<>();
+            params.put("orderNo",orderNo);
+            String result = HttpUtil.doPost(cbsUrl,params);
+            Map<String,Object> map = JSONObject.parseObject(result, Map.class);
+            if (map!=null){
+                Object obj = map.get("data");
+                if (obj!=null){
+                    Records records = JSONObject.parseObject(obj.toString(), Records.class);
+                    if (records!=null){
+                        DetectionData detectionData = records.getDetectionData();
+                        if (detectionData!=null){
+                            List<Certificate> certificate = detectionData.getCertificate();
+                            if (certificate!=null&&!certificate.isEmpty()){
+                                for(Certificate ce:certificate){
+                                    if (ce.getName().contains("左前45")){
+                                        carimg =cbsImgUrl+ ce.getNetImg();
+                                    }
+                                }
+                                if (StringUtils.isEmpty(carimg)){
+                                    carimg=cbsImgUrl+ certificate.get(0).getNetImg();
+                                }
+                            }
+                        }
+
+                    }
+                }
+
+            }
+        }
+        String carimgAddr = writePic(carimg);
+        String carbosomimg = car.getCarbosomimg();
+        String carbosomimgAddr = writePic(carbosomimg);
+        String carmotorimg = car.getCarmotorimg();
+        String carmotorimgAddr = writePic(carmotorimg);
+        car.setCarimg(carimgAddr);
+        car.setCarbosomimg(carbosomimgAddr);
+        car.setCarmotorimg(carmotorimgAddr);
+        //2是没有标书关联。1是有关联
+        car.setOther("2");
+        int saveCount = carDao.insertSelective(car);
+        if (saveCount > 0) {
+            success.incrementAndGet();
+        } else {
+            failed.incrementAndGet();
+            builder.append(carframenumber).append(",");
+        }
     }
 
     public String writePic(String pathName) {
@@ -690,14 +756,15 @@ public class CarinfoController {
     }
 
     //成交、违规列表查询车辆
-    @ApiOperation(value="成交、违规列表查询车辆")
+    @ApiOperation(value = "成交、违规列表查询车辆")
     @PostMapping(value = "/carInfoList")
     @ResponseBody
     public Map<String, Object> carInfoList(@RequestBody Map map) {
         map = userService.carInfoList(map);
         return map;
     }
-    @ApiOperation(value="流拍列表查询车辆")
+
+    @ApiOperation(value = "流拍列表查询车辆")
     //流拍列表查询车辆
     @PostMapping(value = "/carCopyList")
     @ResponseBody

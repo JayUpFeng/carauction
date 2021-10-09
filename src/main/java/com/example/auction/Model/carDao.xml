@@ -302,104 +302,104 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.example.auction.Model.car">
     update car
     <set>
-      <if test="carname != null">
+      <if test="carname != null and carname != ''">
         carname = #{carname,jdbcType=VARCHAR},
       </if>
-      <if test="carcolor != null">
+      <if test="carcolor != null and carcolor != ''">
         carcolor = #{carcolor,jdbcType=VARCHAR},
       </if>
-      <if test="carplatenumber != null">
+      <if test="carplatenumber != null and carplatenumber != ''">
         carplatenumber = #{carplatenumber,jdbcType=VARCHAR},
       </if>
-      <if test="carhostid != null">
+      <if test="carhostid != null and carhostid != ''">
         carhostid = #{carhostid,jdbcType=VARCHAR},
       </if>
-      <if test="carframenumber != null">
+      <if test="carframenumber != null and carframenumber != ''">
         carframenumber = #{carframenumber,jdbcType=VARCHAR},
       </if>
-      <if test="motornumber != null">
+      <if test="motornumber != null and motornumber != ''">
         motornumber = #{motornumber,jdbcType=VARCHAR},
       </if>
-      <if test="brandcarseries != null">
+      <if test="brandcarseries != null and brandcarseries != ''">
         brandcarseries = #{brandcarseries,jdbcType=VARCHAR},
       </if>
-      <if test="keynumber != null">
+      <if test="keynumber != null and keynumber != ''">
         keynumber = #{keynumber,jdbcType=VARCHAR},
       </if>
-      <if test="actualservicelife != null">
+      <if test="actualservicelife != null and actualservicelife != ''">
         actualservicelife = #{actualservicelife,jdbcType=VARCHAR},
       </if>
-      <if test="onbrandtime != null">
+      <if test="onbrandtime != null and onbrandtime != ''">
         onbrandtime = #{onbrandtime,jdbcType=VARCHAR},
       </if>
-      <if test="drivinglicense != null">
+      <if test="drivinglicense != null and drivinglicense != ''">
         drivinglicense = #{drivinglicense,jdbcType=VARCHAR},
       </if>
-      <if test="assessmentprice != null">
+      <if test="assessmentprice != null and assessmentprice != ''">
         assessmentprice = #{assessmentprice,jdbcType=VARCHAR},
       </if>
-      <if test="accidentvehicle != null">
+      <if test="accidentvehicle != null and accidentvehicle != ''">
         accidentvehicle = #{accidentvehicle,jdbcType=VARCHAR},
       </if>
-      <if test="floor != null">
+      <if test="floor != null and floor != ''">
         floor = #{floor,jdbcType=VARCHAR},
       </if>
-      <if test="assessmentpricetwo != null">
+      <if test="assessmentpricetwo != null and assessmentpricetwo != ''">
         assessmentpricetwo = #{assessmentpricetwo,jdbcType=VARCHAR},
       </if>
-      <if test="carimg != null">
+      <if test="carimg != null and carimg != ''">
         carimg = #{carimg,jdbcType=VARCHAR},
       </if>
-      <if test="other != null">
+      <if test="other != null and other != ''">
         other = #{other,jdbcType=VARCHAR},
       </if>
-      <if test="carport != null">
+      <if test="carport != null and carport != ''">
         carport = #{carport,jdbcType=VARCHAR},
       </if>
-      <if test="cararea != null">
+      <if test="cararea != null and cararea != ''">
         cararea = #{cararea,jdbcType=VARCHAR},
       </if>
-      <if test="caraddress != null">
+      <if test="caraddress != null and caraddress != ''">
         caraddress = #{caraddress,jdbcType=VARCHAR},
       </if>
-      <if test="carbosomimg != null">
+      <if test="carbosomimg != null and carbosomimg != ''">
         carbosomimg = #{carbosomimg,jdbcType=VARCHAR},
       </if>
-      <if test="carmotorimg != null">
+      <if test="carmotorimg != null and carmotorimg != ''">
         carmotorimg = #{carmotorimg,jdbcType=VARCHAR},
       </if>
-      <if test="carnumber != null">
+      <if test="carnumber != null and carnumber != ''">
         carnumber = #{carnumber,jdbcType=VARCHAR},
       </if>
-      <if test="dealtime != null">
+      <if test="dealtime != null and dealtime != ''">
         dealtime = #{dealtime,jdbcType=VARCHAR},
       </if>
-      <if test="inspectionhttp != null">
+      <if test="inspectionhttp != null and inspectionhttp != ''">
         inspectionhttp = #{inspectionhttp,jdbcType=VARCHAR},
       </if>
-      <if test="vehiclesys != null">
+      <if test="vehiclesys != null and vehiclesys != ''">
         vehiclesys = #{vehiclesys,jdbcType=VARCHAR},
       </if>
-      <if test="jurisdiction != null">
+      <if test="jurisdiction != null and jurisdiction != ''">
           jurisdiction = #{jurisdiction,jdbcType=VARCHAR},
       </if>
-      <if test="carthumbnail != null">
+      <if test="carthumbnail != null and carthumbnail != ''">
         carthumbnail = #{carthumbnail,jdbcType=VARCHAR},
       </if>
-      <if test="carstate != null">
+      <if test="carstate != null and carstate != ''">
         carstate = #{carstate,jdbcType=VARCHAR},
       </if>
-      <if test="batchnumber != null">
+      <if test="batchnumber != null and batchnumber != ''">
         batchnumber = #{batchnumber,jdbcType=VARCHAR},
       </if>
-      <if test="reporturl != null">
+      <if test="reporturl != null and reporturl != '' ">
         reporturl = #{reporturl,jdbcType=VARCHAR},
       </if>
-      <if test="insuranceexpire != null">
-        #{insuranceexpire,jdbcType=VARCHAR},
+      <if test="insuranceexpire != null and insuranceexpire != ''">
+        insuranceexpire= #{insuranceexpire,jdbcType=VARCHAR},
       </if>
-      <if test="yearexpire != null">
-        #{yearexpire,jdbcType=VARCHAR}
+      <if test="yearexpire != null and yearexpire != ''">
+        yearexpire = #{yearexpire,jdbcType=VARCHAR}
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}

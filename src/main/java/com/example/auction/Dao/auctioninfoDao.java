@@ -55,8 +55,16 @@ public interface auctioninfoDao {
     List<auctioninfo> selectList7(Map map);
     int selectList7Count(Map map);
     //流拍列表
+    List<auctioninfo> selectList8(Map map);
+    int selectList8Count(Map map);
+    //根据车架号查询
+    List<auctioninfo> selectList9(Map map);
+    int selectList9Count(Map map);
+    //流拍列表
     List<auctioninfo> lossAuction(Map map);
     int lossAuctionCount(Map map);
     //修改最高出价
     int updateLossAuction(auctioninfo auctioninfo);
+    //中标列表优化
+    List<auctioninfo> selectListNew3(Map map);
 }

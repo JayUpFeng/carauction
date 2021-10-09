@@ -18,11 +18,12 @@
       <arg column="auctionjurisdiction" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="transactionamount" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="carimg" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="updatetime" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List">
     id, auctiontime, cycle, carid, floor, assessmentprice, other,
-     auctionnumber,state,auctionendtime,cardealers,issesscar,auctionjurisdiction,transactionamount,carimg
+     auctionnumber,state,auctionendtime,cardealers,issesscar,auctionjurisdiction,transactionamount,carimg,updatetime
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
@@ -42,7 +43,7 @@
       #{carid,jdbcType=VARCHAR}, #{floor,jdbcType=VARCHAR}, #{assessmentprice,jdbcType=VARCHAR},
       #{other,jdbcType=VARCHAR}, #{auctionnumber,jdbcType=VARCHAR},#{state,jdbcType=VARCHAR},
       #{auctionendtime,jdbcType=VARCHAR},#{cardealers,jdbcType=VARCHAR},#{issesscar,jdbcType=VARCHAR},
-      #{auctionjurisdiction,jdbcType=VARCHAR}, #{transactionamount,jdbcType=VARCHAR}, #{carimg,jdbcType=VARCHAR})
+      #{auctionjurisdiction,jdbcType=VARCHAR}, #{transactionamount,jdbcType=VARCHAR}, #{carimg,jdbcType=VARCHAR}, #{updatetime,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.auction.Model.auctioninfo" useGeneratedKeys="true" keyProperty="id">
     insert into auctioninfo
@@ -92,6 +93,9 @@
       <if test="carimg != null">
         carimg,
       </if>
+      <if test="updatetime != null">
+        updatetime,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -139,6 +143,9 @@
       <if test="carimg != null">
         #{carimg,jdbcType=VARCHAR},
       </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.example.auction.Model.auctioninfo">
@@ -185,6 +192,9 @@
       </if>
       <if test="carimg != null">
         carimg = #{carimg,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        updatetime = #{updatetime,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -512,6 +522,9 @@
       <if test="carimg != null">
         carimg = #{carimg,jdbcType=VARCHAR},
       </if>
+      <if test="updatetime != null">
+        updatetime = #{updatetime,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -532,7 +545,7 @@
     auctioninfo a
     on re.auctionnumber=a.auctionnumber
     and a.state=#{state}
-    order by a.auctionnumber desc
+    order by ${sort} desc
     limit #{page},#{limit}
   </select>
   <select id="selectList6Count" resultType="int">
@@ -556,7 +569,19 @@
 
   <select id="selectList7" resultType="com.example.auction.Model.auctioninfo">
     select a.* from auctioninfo a where a.id in
-    (select DISTINCT ac.auctioninfoid from auctioninfo_car ac where
+    (select DISTINCT  ac.auctioninfoid from auctioninfo_car ac,bidder b ,userinfo u
+    where u.id=b.userid
+    and ac.auctioninfoid=b.auctioninfoid
+    <if test="userid2 !=null and userid2 !=''">
+      and b.userid=#{userid2}
+    </if>
+    <if test="auctionstate !=null and auctionstate !='' ">
+      and b.Auctionstate=#{auctionstate}
+    </if>
+    <if test="paymentstate !=null and paymentstate !='' ">
+      and b.paymentstate=#{paymentstate}
+    </if>
+    and
     ac.carid in (
      select c.id from car c
      <where>
@@ -568,12 +593,24 @@
     )
     and ac.type=#{type}
     )
-    order by a.id desc
+    order by ${sort} desc
     limit #{page},#{limit}
   </select>
   <select id="selectList7Count" resultType="int">
     select count(1) from auctioninfo a where a.id in
-    (select DISTINCT ac.auctioninfoid from auctioninfo_car ac where
+    (select DISTINCT  ac.auctioninfoid from auctioninfo_car ac,bidder b ,userinfo u
+    where u.id=b.userid
+    and ac.auctioninfoid=b.auctioninfoid
+    <if test="userid2 !=null and userid2 !=''">
+      and b.userid=#{userid2}
+    </if>
+    <if test="auctionstate !=null and auctionstate !='' ">
+      and b.Auctionstate=#{auctionstate}
+    </if>
+    <if test="paymentstate !=null and paymentstate !='' ">
+      and b.paymentstate=#{paymentstate}
+    </if>
+     and
     ac.carid in (
      select c.id from car c
     <where>
@@ -586,7 +623,49 @@
     and ac.type=#{type}
     )
   </select>
-
+  <select id="selectList8" resultType="com.example.auction.Model.auctioninfo">
+    select a.* from auctioninfo a where
+    a.state=#{state}
+    order by ${sort} desc
+    limit #{page},#{limit}
+  </select>
+  <select id="selectList8Count" resultType="int">
+    select count(1) from auctioninfo a where a.state=#{state}
+  </select>
+  <select id="selectList9" resultType="com.example.auction.Model.auctioninfo">
+    select a.* from auctioninfo a where a.id in
+    (select DISTINCT  ac.auctioninfoid from auctioninfo_car ac
+    where
+    ac.carid in (
+    select c.id from car c
+    <where>
+      c.carframenumber in
+      <foreach collection="list" index="index" separator="," item="item" open="(" close=")">
+        #{item}
+      </foreach>
+    </where>
+    )
+    and ac.type=#{type}
+    )
+    order by ${sort} desc
+    limit #{page},#{limit}
+  </select>
+  <select id="selectList9Count" resultType="int">
+    select count(1) from auctioninfo a where a.id in
+    (select DISTINCT  ac.auctioninfoid from auctioninfo_car ac
+    where
+    ac.carid in (
+    select c.id from car c
+    <where>
+      c.carframenumber in
+      <foreach collection="list" index="index" separator="," item="item" open="(" close=")">
+        #{item}
+      </foreach>
+    </where>
+    )
+    and ac.type=#{type}
+    )
+  </select>
   <select id="lossAuctionCount" resultType="int">
     select count(1) from auctioninfo a where a.state='4'
   </select>
@@ -600,8 +679,35 @@
   </select>
 
   <!--设置auctioninfo表的流拍金额为当前传入金额-->
-  <update id="updateLossAuction">
-      update auctioninfo  a set a.transactionamount = #{transactionamount} where a.id=#{id}
+  <update id="updateLossAuction"  parameterType="com.example.auction.Model.auctioninfo">
+      update auctioninfo  a
+      <set>
+        <if test="transactionamount !=null">
+          a.transactionamount = #{transactionamount},
+        </if>
+        <if test="carimg !=null">
+          a.carimg=#{carimg}
+        </if>
+      </set>
+       where a.id=#{id}
     </update>
-
+  <select id="selectListNew3" resultType="com.example.auction.Model.auctioninfo">
+    select DISTINCT a.* from  (SELECT bt.*  from
+    (SELECT b.userid,b.auctionnumber from `userinfo` u,bidder b where u.id=b.userid
+    <if test="userid2 !=null and userid2 !=''">
+      and b.userid=#{userid2}
+    </if>
+    <if test="auctionstate !=null and auctionstate !='' ">
+      and b.Auctionstate=#{auctionstate}
+    </if>
+    <if test="paymentstate !=null and paymentstate !='' ">
+      and b.paymentstate=#{paymentstate}
+    </if>
+    ) bt  LEFT JOIN biddercompany b on bt.userid=b.userid)re
+    inner join
+    auctioninfo a
+    on re.auctionnumber=a.auctionnumber
+    and a.state=#{state}
+    order by id desc
+  </select>
 </mapper>

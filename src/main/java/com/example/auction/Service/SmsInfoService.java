@@ -25,10 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @作者 : zhangHe
@@ -52,6 +49,8 @@ public class SmsInfoService {
     private String appkey;
     @Value("${tencent.templateId}")
     private String templateId;
+    @Value("${tencent.chinesetemplateId}")
+    private String chineseTemplateId;
     @Value("${tencent.smsSign}")
     private String smsSign;
     @Autowired
@@ -62,7 +61,7 @@ public class SmsInfoService {
     private PublicUserDao publicUserDao;
 
 
-    public Map<String,Object> getSmsCodeAli(String phone, Map<String,Object> map) {
+    public Map<String, Object> getSmsCodeAli(String phone, Map<String, Object> map) {
         //可自助调整超时时间
         System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
         System.setProperty("sun.net.client.defaultReadTimeout", "10000");
@@ -113,7 +112,7 @@ public class SmsInfoService {
             String cod = sendSmsResponse.getCode();
             System.out.println("cod=====" + cod);
             //获取发送状态
-            map.put("smsCode",code);
+            map.put("smsCode", code);
             return map;
         } catch (ClientException e) {
             e.printStackTrace();
@@ -121,7 +120,7 @@ public class SmsInfoService {
         return map;
     }
 
-    public Map<String,Object> getSmsCodeTencent(String phone, Map<String,Object> map) {
+    public Map<String, Object> getSmsCodeTencent(String phone, Map<String, Object> map) {
         // 短信应用SDK AppID   // 1400开头
         int appid = Integer.parseInt(appId);
         // 短信应用SDK AppKey
@@ -133,14 +132,14 @@ public class SmsInfoService {
         try {
             //参数，一定要对应短信模板中的参数顺序和个数，
             int code = (int) ((Math.random() * 9 + 1) * 100000);
-            String[] params = {code+""};
+            String[] params = {code + ""};
             //创建ssender对象
             SmsSingleSender ssender = new SmsSingleSender(appid, appkey);
             //发送
-            SmsSingleSenderResult result = ssender.sendWithParam("86", phone,Integer.parseInt(templateId), params, smsSign, "", "");
+            SmsSingleSenderResult result = ssender.sendWithParam("86", phone, Integer.parseInt(templateId), params, smsSign, "", "");
             // 签名参数未提供或者为空时，会使用默认签名发送短信
             System.out.println(result.toString());
-            if(result.result==0){
+            if (result.result == 0) {
                 //把上一个设置为已删除
                 List<SmsInfo> list = smsInfoDao.selectByPhone(phone);
                 if (list != null && list.size() > 0) {
@@ -157,7 +156,7 @@ public class SmsInfoService {
                 smsInfo.setCode(code + "");
                 smsInfo.setIsdel(0);
                 smsInfoDao.addSmsInfo(smsInfo);
-                map.put("smsCode",code);
+                map.put("smsCode", code);
                 return map;
             }
         } catch (HTTPException e) {
@@ -169,7 +168,7 @@ public class SmsInfoService {
         } catch (IOException e) {
             // 网络IO错误
             e.printStackTrace();
-        }catch (Exception e) {
+        } catch (Exception e) {
             // 网络IO错误
             e.printStackTrace();
         }
@@ -187,18 +186,18 @@ public class SmsInfoService {
             if (byTel != null) {
                 //更新企业微信用户的openid
                 Integer state = byTel.getState();
-                if (state!=null&&state==0){
+                if (state != null && state == 0) {
                     userdao.updateOpenIdAndStateById(byTel.getId(), smsInfo.getOpenid(), 2);
-                }else{
-                    userdao.updateOpenIdById(byTel.getId(),smsInfo.getOpenid());
+                } else {
+                    userdao.updateOpenIdById(byTel.getId(), smsInfo.getOpenid());
                 }
                 byTel.setOpenid(smsInfo.getOpenid());
                 return CommonResponse.success1(byTel);
             } else {
-                if (!StringUtils.isEmpty(smsInfo.getOpenid())){
+                if (!StringUtils.isEmpty(smsInfo.getOpenid())) {
                     //根据openid获取用户的username
                     PublicUser byOpenId = publicUserDao.getByOpenId(smsInfo.getOpenid());
-                    if (byOpenId!=null){
+                    if (byOpenId != null) {
                         Userinfo userinfo = new Userinfo();
                         userinfo.setUsername(byOpenId.getUsername());
                         userinfo.setOpenid(smsInfo.getOpenid());
@@ -207,22 +206,81 @@ public class SmsInfoService {
                         userinfo.setState(1);
                         userinfo.setParticipate("2");
                         Integer maxUserNumber = userdao.getMaxUserNumber();
-                        if (maxUserNumber!=null){
-                            maxUserNumber+=1;
-                        }else{
-                            maxUserNumber=100000;
+                        if (maxUserNumber != null) {
+                            maxUserNumber += 1;
+                        } else {
+                            maxUserNumber = 100000;
                         }
                         userinfo.setUsernumber(maxUserNumber);
                         userdao.addUser(userinfo);
                         return CommonResponse.success1(userinfo);
-                    }else {
+                    } else {
                         map.put("msg", "请重新关注公众号！");
                     }
-                }else {
+                } else {
                     map.put("msg", "请重新关注公众号！");
                 }
             }
         }
         return map;
+    }
+
+    public Map<String, Object> updateCarMsg(Map<String, Object> map) {
+        Map<String, Object> m = new HashMap<>();
+        m.put("code", 0);
+        m.put("msg", 1);
+        Object useridsObj = map.get("userids");
+        Object typeObj = map.get("type");
+        // 短信应用SDK AppID   // 1400开头
+        int appid = Integer.parseInt(appId);
+        try {
+            //参数，一定要对应短信模板中的参数顺序和个数，
+            String msg = "尊敬的神易好车合作商您好： \n" +
+                    "神易好车竞拍系统今天将为各位合作商更新车源信息，望大家积极参与投标出价，竞拍到自己心仪的车辆。\n" +
+                    "温馨提示:背户车(带大本)以及全款带大本都是不能过户车辆，望各位合作商周知\n" +
+                    "神易好车祝:贵公司(经销商）生意兴隆、财源广进。回T退订";
+//            String[] params = {msg};
+            String[] params = {};
+            //创建ssender对象
+            SmsSingleSender ssender = new SmsSingleSender(appid, appkey);
+            List<Integer> idList = new ArrayList<>();
+            List<String> phones=null;
+            if (useridsObj != null&&typeObj!=null) {
+                String typeStr = typeObj.toString();
+                if ("0".equals(typeStr)){
+                    String[] split = useridsObj.toString().split(",");
+                    if (split.length > 0) {
+                        for (String id : split) {
+                            idList.add(Integer.parseInt(id));
+                        }
+                    }
+                   phones = userdao.getPhonesByIds(idList);
+                }else{
+                    //从数据库查询数据 TODO
+                    phones = userdao.getPhonesByParticipate();
+                }
+            }
+            if (phones!=null&&!phones.isEmpty()){
+                for (String phone:phones) {
+                    //发送
+                    SmsSingleSenderResult result = ssender.sendWithParam("86", phone, Integer.parseInt(chineseTemplateId), params, smsSign, "", "");
+                    // 签名参数未提供或者为空时，会使用默认签名发送短信
+                    System.out.println(result.toString());
+                }
+            }
+        } catch (HTTPException e) {
+            // HTTP响应码错误
+            e.printStackTrace();
+        } catch (JSONException e) {
+            // json解析错误
+            e.printStackTrace();
+        } catch (IOException e) {
+            // 网络IO错误
+            e.printStackTrace();
+        } catch (Exception e) {
+            // 网络IO错误
+            e.printStackTrace();
+        }
+        return m;
     }
 }

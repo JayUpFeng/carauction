@@ -64,6 +64,7 @@ public class car {
     @Excel(name = "批号")
     private String batchnumber;
     //报告连接地址
+    @Excel(name = "报告地址")
     private String reporturl;
     //保险截止日期
     @Excel(name = "保险截止",importFormat="yyyy/MM/dd")
@@ -75,6 +76,9 @@ public class car {
     private Date yearexpiredate;
     //数据库保存字段
     private String yearexpire;
+    //查博士项目根据订单编号获取车辆外部图片
+    @Excel(name = "订单编号")
+    private String orderNo;
     public car() {
         super();
     }
@@ -412,6 +416,14 @@ public class car {
 
     public void setOnbrandtimedate(Date onbrandtimedate) {
         this.onbrandtimedate = onbrandtimedate;
+    }
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
     }
 
     @Override
